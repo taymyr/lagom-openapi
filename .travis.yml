@@ -1,0 +1,34 @@
+language: java
+
+env:
+- MAVEN_OPTS="-Dhttp.agent=Maven"
+
+cache:
+  directories:
+  - $HOME/.cache
+  - $HOME/.m2
+
+before_install:
+- cp .travis.settings.xml $HOME/.m2/settings.xml
+- echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --import
+
+install: ./mvnw compile dependency:resolve dependency:resolve-plugins -B -V
+
+script: ./mvnw verify -B -V
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
+
+deploy:
+# Deploy releases
+- provider: script
+  script: ./mvnw deploy -B -V -P release
+  skip_cleanup: true
+  on:
+    tags: true
+# Deploy snapshots
+- provider: script
+  script: ./mvnw deploy -B -V
+  skip_cleanup: true
+  on:
+    branch: develop
