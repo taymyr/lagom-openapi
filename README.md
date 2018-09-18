@@ -1,3 +1,10 @@
+[![codebeat](https://codebeat.co/badges/36a7965b-aa57-40af-8db3-fd7e6b54fee3)](https://codebeat.co/projects/github-com-taymyr-openapi-java-develop)
+[![Build Status](https://travis-ci.org/taymyr/openapi-java.svg?branch=develop)](https://travis-ci.org/taymyr/openapi-java)
+[![Javadoc API](https://www.javadoc.io/badge/org.taymyr/openapi-java-api.svg?label=javadoc api)](https://www.javadoc.io/doc/org.taymyr/openapi-java-api)
+[![Javadoc Impl](https://www.javadoc.io/badge/org.taymyr/openapi-java-impl.svg?label=javadoc impl)](https://www.javadoc.io/doc/org.taymyr/openapi-java-impl)
+[![codecov](https://codecov.io/gh/taymyr/openapi-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/taymyr/openapi-java)
+[![Maven API](https://img.shields.io/maven-central/v/org.taymyr/openapi-java.svg)](https://search.maven.org/search?q=a:openapi-java%20AND%20g:org.taymyr)
+
 # OpenAPI service for Lagom
 
 TODO
