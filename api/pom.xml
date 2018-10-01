@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.taymyr</groupId>
-    <artifactId>openapi-java</artifactId>
+    <groupId>org.taymyr.lagom</groupId>
+    <artifactId>lagom-openapi-java</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>openapi-java-api</artifactId>
+  <artifactId>lagom-openapi-java-api</artifactId>
   <packaging>jar</packaging>
   <name>Taymyr: Openapi Java API</name>
   <dependencies>
