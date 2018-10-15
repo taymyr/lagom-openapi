@@ -1,4 +1,4 @@
-package org.taymyr.openapi
+package org.taymyr.lagom.openapi
 
 import com.lightbend.lagom.javadsl.api.transport.NotFound
 import com.typesafe.config.ConfigFactory
@@ -9,9 +9,6 @@ import io.kotlintest.whenReady
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.YAML
 import org.taymyr.lagom.javadsl.api.transport.ResponseHeaders.OK_JSON
 
-/**
- * @author Sergey Morgunov
- */
 class OpenAPIServiceTest : StringSpec({
 
     "Service with incorrect config should be return 404" {

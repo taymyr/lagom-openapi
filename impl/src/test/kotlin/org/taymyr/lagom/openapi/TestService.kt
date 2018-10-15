@@ -1,4 +1,4 @@
-package org.taymyr.openapi
+package org.taymyr.lagom.openapi
 
 import com.lightbend.lagom.javadsl.api.Descriptor
 

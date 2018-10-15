@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.taymyr</groupId>
-  <artifactId>openapi-java</artifactId>
-  <version>0.0.1</version>
+  <groupId>org.taymyr.lagom</groupId>
+  <artifactId>lagom-openapi-java</artifactId>
+  <version>0.0.2</version>
   <packaging>pom</packaging>
   <name>Taymyr: Openapi Java</name>
   <description>OpenAPI service for Lagom framework</description>
@@ -28,6 +28,7 @@
       <id>taymyr</id>
       <name>Taymyr Contributors</name>
       <url>https://github.com/taymyr</url>
+      <email>contributors@taymyr.org</email>
     </developer>
   </developers>
   <scm>
@@ -47,7 +48,6 @@
     <lagom.version>1.4.8</lagom.version>
     <ktlint.version>0.28.0</ktlint.version>
     <antrun.plugin.version>1.8</antrun.plugin.version>
-    <javadoc.plugin.version>3.0.1</javadoc.plugin.version>
     <source.plugin.version>3.0.1</source.plugin.version>
     <jar.plugin.version>3.1.0</jar.plugin.version>
     <surefire.plugin.version>2.22.0</surefire.plugin.version>
@@ -60,7 +60,6 @@
     <kotlin.compiler.jvmTarget>1.8</kotlin.compiler.jvmTarget>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <compiler.plugin.version>3.5.1</compiler.plugin.version>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -75,9 +74,9 @@
           <version>${kotlin.version}</version>
         </plugin>
         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>${compiler.plugin.version}</version>
+          <groupId>org.jetbrains.dokka</groupId>
+          <artifactId>dokka-maven-plugin</artifactId>
+          <version>${dokka.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -93,11 +92,6 @@
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
           <version>${jacoco.plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-javadoc-plugin</artifactId>
-          <version>${javadoc.plugin.version}</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -181,6 +175,11 @@
       <dependency>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-stdlib-jdk8</artifactId>
+        <version>${kotlin.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-reflect</artifactId>
         <version>${kotlin.version}</version>
       </dependency>
       <dependency>
