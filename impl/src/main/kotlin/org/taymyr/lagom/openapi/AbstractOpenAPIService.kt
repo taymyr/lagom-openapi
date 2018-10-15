@@ -1,4 +1,4 @@
-package org.taymyr.openapi
+package org.taymyr.lagom.openapi
 
 import akka.NotUsed
 import com.lightbend.lagom.javadsl.api.transport.MessageProtocol
@@ -13,9 +13,6 @@ import org.taymyr.lagom.javadsl.api.transport.ResponseHeaders.ok
 import java.util.Optional.ofNullable
 import java.util.concurrent.CompletableFuture.completedFuture
 
-/**
- * @author Sergey Morgunov
- */
 abstract class AbstractOpenAPIService(config: Config) : OpenAPIService {
 
     private val apiSpec: String?

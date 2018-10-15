@@ -54,6 +54,7 @@
         <configuration>
           <args>
             <arg>-Xjsr305=strict</arg>
+            <arg>-Xjvm-default=enable</arg>
           </args>
         </configuration>
         <executions>
@@ -102,7 +103,6 @@
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${jacoco.plugin.version}</version>
         <executions>
           <execution>
             <goals>

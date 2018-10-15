@@ -1,9 +1,11 @@
+[![Gitter](https://img.shields.io/badge/chat-gitter-purple.svg)](https://gitter.im/taymyr/taymyr)
+[![Gitter_RU](https://img.shields.io/badge/chat-russian%20channel-purple.svg)](https://gitter.im/taymyr/taymyr_ru)
 [![codebeat](https://codebeat.co/badges/e9c10a77-0084-4cc7-9328-2d224e95c558)](https://codebeat.co/projects/github-com-taymyr-lagom-openapi-java-develop)
 [![Build Status](https://travis-ci.org/taymyr/lagom-openapi-java.svg?branch=develop)](https://travis-ci.org/taymyr/lagom-openapi-java)
 [![Javadoc API](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-api.svg?label=javadoc%20api)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-api)
 [![Javadoc Impl](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-impl.svg?label=javadoc%20impl)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-impl)
 [![codecov](https://codecov.io/gh/taymyr/lagom-openapi-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/taymyr/lagom-openapi-java)
-[![Maven API](https://img.shields.io/maven-central/v/org.taymyr.lagom/lagom-openapi-java.svg)](https://search.maven.org/search?q=a:lagom-openapi-java%20AND%20g:org.taymyr.lagom)
+[![Maven](https://img.shields.io/maven-central/v/org.taymyr.lagom/lagom-openapi-java.svg)](https://search.maven.org/search?q=a:lagom-openapi-java%20AND%20g:org.taymyr.lagom)
 
 # OpenAPI service for Lagom
 
