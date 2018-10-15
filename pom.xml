@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.taymyr.lagom</groupId>
   <artifactId>lagom-openapi-java</artifactId>
-  <version>0.0.2-SNAPSHOT</version>
+  <version>0.0.2</version>
   <packaging>pom</packaging>
   <name>Taymyr: Openapi Java</name>
   <description>OpenAPI service for Lagom framework</description>
