@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.taymyr.lagom</groupId>
   <artifactId>lagom-openapi-java</artifactId>
-  <version>0.1.0-SNAPSHOT</version>
+  <version>0.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Taymyr: Openapi Java</name>
   <description>OpenAPI service for Lagom framework</description>
@@ -41,11 +41,13 @@
     <lagom.extensions.version>0.0.2</lagom.extensions.version>
     <kotlin.logging.version>1.6.10</kotlin.logging.version>
     <config4k.version>0.4.0</config4k.version>
-    <kotlintest.version>3.1.10</kotlintest.version>
+    <junit5.version>5.3.2</junit5.version>
+    <assertj.version>3.11.1</assertj.version>
     <scala.binary.version>2.12</scala.binary.version>
     <dokka.version>0.9.17</dokka.version>
-    <kotlin.version>1.2.70</kotlin.version>
+    <kotlin.version>1.3.21</kotlin.version>
     <lagom.version>1.4.8</lagom.version>
+    <swagger.core.version>2.0.7</swagger.core.version>
     <ktlint.version>0.28.0</ktlint.version>
     <antrun.plugin.version>1.8</antrun.plugin.version>
     <source.plugin.version>3.0.1</source.plugin.version>
@@ -188,6 +190,11 @@
         <version>${kotlin.logging.version}</version>
       </dependency>
       <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-core</artifactId>
+        <version>${swagger.core.version}</version>
+      </dependency>
+      <dependency>
         <groupId>io.github.config4k</groupId>
         <artifactId>config4k</artifactId>
         <version>${config4k.version}</version>
@@ -198,9 +205,24 @@
         <version>${lagom.extensions.version}</version>
       </dependency>
       <dependency>
-        <groupId>io.kotlintest</groupId>
-        <artifactId>kotlintest-runner-junit5</artifactId>
-        <version>${kotlintest.version}</version>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit5.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-params</artifactId>
+        <version>${junit5.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>${junit5.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

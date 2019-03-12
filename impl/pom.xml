@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.taymyr.lagom</groupId>
     <artifactId>lagom-openapi-java</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>lagom-openapi-java-impl</artifactId>
@@ -26,6 +26,11 @@
       <artifactId>kotlin-logging</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-core</artifactId>
+      <version>${swagger.core.version}</version>
+    </dependency>
+    <dependency>
       <groupId>io.github.config4k</groupId>
       <artifactId>config4k</artifactId>
     </dependency>
@@ -39,14 +44,29 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.kotlintest</groupId>
-      <artifactId>kotlintest-runner-junit5</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test-runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
     <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
-    <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
@@ -60,6 +80,7 @@
         <executions>
           <execution>
             <id>compile</id>
+            <phase>process-sources</phase>
             <goals> <goal>compile</goal> </goals>
           </execution>
           <execution>
