@@ -13,7 +13,7 @@ object Versions {
     const val lagom = "1.4.6" // "1.5.0-RC2"
     const val ktlint = "0.30.0"
     const val `kotlin-logging` = "1.6.10"
-    const val config4k = "0.4.0"
+    const val config4k = "0.4.1"
     const val `lagom-extensions` = "0.1.0"
     const val jacoco = "0.8.2"
     const val kotlintest = "3.3.2"
