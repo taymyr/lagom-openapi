@@ -1,7 +1,6 @@
 [![Gitter](https://img.shields.io/badge/chat-gitter-purple.svg)](https://gitter.im/taymyr/taymyr)
 [![Gitter_RU](https://img.shields.io/badge/chat-russian%20channel-purple.svg)](https://gitter.im/taymyr/taymyr_ru)
-[![codebeat](https://codebeat.co/badges/e9c10a77-0084-4cc7-9328-2d224e95c558)](https://codebeat.co/projects/github-com-taymyr-lagom-openapi-java-develop)
-[![Build Status](https://travis-ci.org/taymyr/lagom-openapi-java.svg?branch=develop)](https://travis-ci.org/taymyr/lagom-openapi-java)
+[![Build Status](https://travis-ci.org/taymyr/lagom-openapi.svg?branch=master)](https://travis-ci.org/taymyr/lagom-openapi)
 [![Javadoc API](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-api.svg?label=javadoc%20api)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-api)
 [![Javadoc Impl](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-impl.svg?label=javadoc%20impl)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-impl)
 [![codecov](https://codecov.io/gh/taymyr/lagom-openapi-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/taymyr/lagom-openapi-java)
@@ -11,9 +10,11 @@
 
 TODO
 
-## License
+## Contributions
 
-Copyright © 2018 Digital Economy League (https://www.digitalleague.ru/).
+Contributions are very welcome.
+
+## License
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this project except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
 

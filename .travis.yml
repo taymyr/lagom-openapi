@@ -1,34 +1,51 @@
 language: java
 
 env:
-- MAVEN_OPTS="-Dhttp.agent=Maven"
+  - SCALA_VERSION=2.11
+  - SCALA_VERSION=2.12
 
+matrix:
+  fast_finish: true
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-  - $HOME/.cache
-  - $HOME/.m2
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 
-before_install:
-- cp .travis.settings.xml $HOME/.m2/settings.xml
-- echo $GPG_SECRET_KEYS | base64 --decode | gpg2 --import
-
-install: ./mvnw compile dependency:resolve dependency:resolve-plugins -B -V
-
-script: ./mvnw verify -B -V
+script:
+  # Test with Lagom 1.4.X
+  - ./gradlew clean check -PscalaBinaryVersion=$SCALA_VERSION
+  # Test with Lagom 1.5.X
+  - ./gradlew clean check -PlagomVersion=1.5.0-RC2 -PscalaBinaryVersion=$SCALA_VERSION
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash)
+
+before_deploy:
+  - echo $GPG_SECRET_KEYS | base64 --decode > $HOME/.gnupg/taymyr.gpg
 
 deploy:
-# Deploy releases
-- provider: script
-  script: ./mvnw deploy -B -V -P release
-  skip_cleanup: true
-  on:
-    tags: true
-# Deploy snapshots
-- provider: script
-  script: ./mvnw deploy -B -V
-  skip_cleanup: true
-  on:
-    branch: develop
+  # Deploy releases
+  - provider: script
+    script: ./gradlew publishToNexus closeAndReleaseRepository -x test -Psigning.keyId=$GPG_KEY_NAME -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile=$HOME/.gnupg/taymyr.gpg -PossrhUsername=$OSS_USERNAME -PossrhPassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION
+    skip_cleanup: true
+    on:
+      tags: true
+  # Deploy snapshots
+  - provider: script
+    script: ./gradlew publishToNexus -x test -Psigning.keyId=$GPG_KEY_NAME -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile=$HOME/.gnupg/taymyr.gpg -PossrhUsername=$OSS_USERNAME -PossrhPassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION
+    skip_cleanup: true
+    on:
+      branch: master
+
+notifications:
+  webhooks:
+    urls:
+      - "https://webhooks.gitter.im/e/9e04688b0ae124f5a047"
+      - "https://webhooks.gitter.im/e/869b1a645dc46645e619"
+    on_success: change
+    on_failure: always
+    on_start: never

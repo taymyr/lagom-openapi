@@ -10,6 +10,7 @@ import mu.KLogging
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.JSON
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.fromFile
 import org.taymyr.lagom.javadsl.api.transport.ResponseHeaders.ok
+import play.mvc.Results.ok
 import java.util.Optional.ofNullable
 import java.util.concurrent.CompletableFuture.completedFuture
 
