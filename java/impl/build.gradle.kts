@@ -16,6 +16,8 @@ object Versions {
     const val config4k = "0.4.1"
     const val `lagom-extensions` = "0.1.0"
     const val jacoco = "0.8.2"
+    const val junit5 = "5.3.2"
+    const val assertj = "3.11.1"
     const val kotlintest = "3.3.2"
 }
 
@@ -48,7 +50,10 @@ dependencies {
     implementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     implementation("org.taymyr.lagom", "lagom-extensions-java_$scalaBinaryVersion", Versions.`lagom-extensions`)
 
-    testImplementation("io.kotlintest", "kotlintest-runner-junit5", Versions.kotlintest)
+    testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit5)
+    testImplementation("org.junit.jupiter", "junit-jupiter-params", Versions.junit5)
+    testImplementation("org.junit.jupiter", "junit-jupiter-engine", Versions.junit5)
+    testImplementation("org.assertj", "assertj-core", Versions.assertj)
 }
 
 ktlint {
