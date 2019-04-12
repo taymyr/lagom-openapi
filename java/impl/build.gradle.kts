@@ -15,6 +15,7 @@ object Versions {
     const val `kotlin-logging` = "1.6.10"
     const val config4k = "0.4.1"
     const val `lagom-extensions` = "0.1.0"
+    const val swaggerCore = "2.0.7"
     const val jacoco = "0.8.2"
     const val junit5 = "5.3.2"
     const val assertj = "3.11.1"
@@ -46,6 +47,7 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(project(":java:lagom-openapi-java-api"))
     implementation("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
+    implementation("io.swagger.core.v3", "swagger-core", Versions.swaggerCore)
     implementation("io.github.config4k", "config4k", Versions.config4k)
     implementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     implementation("org.taymyr.lagom", "lagom-extensions-java_$scalaBinaryVersion", Versions.`lagom-extensions`)

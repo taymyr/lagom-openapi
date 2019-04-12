@@ -1,0 +1,164 @@
+openapi: 3.0.1
+info:
+  title: Swagger Petstore
+  license:
+    name: MIT
+  version: 1.0.0
+servers:
+- url: http://petstore.swagger.io/v1
+tags:
+- name: pets
+paths:
+  /pets:
+    get:
+      tags:
+      - pets
+      summary: List all pets
+      operationId: listPets
+      parameters:
+      - name: limit
+        in: query
+        description: How many items to return at one time (max 100)
+        required: true
+        deprecated: false
+        allowEmptyValue: false
+        allowReserved: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: A paged array of pets
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              required: false
+              deprecated: false
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: array
+                properties:
+                  empty:
+                    type: boolean
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                required:
+                - code
+                - message
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+      deprecated: false
+    post:
+      tags:
+      - pets
+      summary: Create a pet
+      operationId: createPets
+      responses:
+        201:
+          description: Null response
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                required:
+                - code
+                - message
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+      deprecated: false
+  /pets/{petId}:
+    get:
+      tags:
+      - pets
+      summary: Info for a specific pet
+      operationId: showPetById
+      parameters:
+      - name: petId
+        in: path
+        description: The id of the pet to retrieve
+        required: true
+        deprecated: false
+        allowEmptyValue: false
+        allowReserved: false
+        schema:
+          type: string
+      responses:
+        200:
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                type: array
+                properties:
+                  empty:
+                    type: boolean
+                items:
+                  $ref: '#/components/schemas/Pet'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                required:
+                - code
+                - message
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  message:
+                    type: string
+      deprecated: false
+components:
+  schemas:
+    Pet:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        tag:
+          type: string
+    Pets:
+      type: array
+      properties:
+        empty:
+          type: boolean
+      items:
+        $ref: '#/components/schemas/Pet'
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
