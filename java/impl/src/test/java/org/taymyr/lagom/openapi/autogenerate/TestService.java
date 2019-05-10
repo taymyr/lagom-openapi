@@ -35,14 +35,20 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
     servers = @Server(
         url = "http://petstore.swagger.io/v1"
     ),
-    tags = @Tag(name = "pets")
+    tags = @Tag(name = "pets", description = "Pets tag")
 )
 public interface TestService extends OpenAPIService {
 
     @Operation(
+        operationId = "listPets",
         summary = "List all pets",
         tags = "pets",
-        parameters = @Parameter(in = QUERY, name = "limit", description = "How many items to return at one time (max 100)"),
+        parameters = @Parameter(
+            description = "How many items to return at one time (max 100)",
+            name = "limit",
+            in = QUERY,
+            schema = @Schema(implementation = Integer.class)
+        ),
         responses = {
             @ApiResponse(
                 responseCode = "200",
@@ -62,10 +68,12 @@ public interface TestService extends OpenAPIService {
                     schema = @Schema(implementation = Error.class)
                 )
             )
-        })
+        }
+    )
     ServiceCall<NotUsed, Pets> listPets(Optional<Integer> limit);
 
     @Operation(
+        operationId = "createPets",
         summary = "Create a pet",
         tags = "pets",
         responses = {
@@ -85,9 +93,15 @@ public interface TestService extends OpenAPIService {
     ServiceCall<NotUsed, NotUsed> createPets();
 
     @Operation(
+        operationId = "showPetById",
         summary = "Info for a specific pet",
         tags = "pets",
-        parameters = @Parameter(in = PATH, name = "petId", description = "The id of the pet to retrieve"),
+        parameters = @Parameter(
+            description = "The id of the pet to retrieve",
+            name = "petId",
+            in = PATH,
+            schema = @Schema(implementation = String.class)
+        ),
         responses = {
             @ApiResponse(
                 responseCode = "200",

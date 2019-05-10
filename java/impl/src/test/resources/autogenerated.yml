@@ -6,8 +6,10 @@ info:
   version: 1.0.0
 servers:
 - url: http://petstore.swagger.io/v1
+  variables: {}
 tags:
 - name: pets
+  description: Pets tag
 paths:
   /pets:
     get:
@@ -19,7 +21,7 @@ paths:
       - name: limit
         in: query
         description: How many items to return at one time (max 100)
-        required: true
+        required: false
         deprecated: false
         allowEmptyValue: false
         allowReserved: false

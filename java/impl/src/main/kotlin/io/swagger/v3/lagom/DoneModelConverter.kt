@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi
+package io.swagger.v3.lagom
 
 import akka.Done
 import io.swagger.v3.core.converter.AnnotatedType
