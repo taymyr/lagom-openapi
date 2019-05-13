@@ -19,7 +19,7 @@ script:
   # Test with Lagom 1.4.X
   - ./gradlew clean check -PscalaBinaryVersion=$SCALA_VERSION
   # Test with Lagom 1.5.X
-  - ./gradlew clean check -PlagomVersion=1.5.0-RC2 -PscalaBinaryVersion=$SCALA_VERSION
+  - ./gradlew clean check -PlagomVersion=1.5.1 -PscalaBinaryVersion=$SCALA_VERSION
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

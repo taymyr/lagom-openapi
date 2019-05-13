@@ -10,26 +10,25 @@ val ossrhPassword: String? by project
 
 object Versions {
     const val scalaBinary = "2.12"
-    const val lagom = "1.4.6" // "1.5.0-RC2"
-    const val ktlint = "0.30.0"
+    const val lagom = "1.4.12" // "1.5.1"
+    const val ktlint = "0.32.0"
     const val `kotlin-logging` = "1.6.10"
     const val config4k = "0.4.1"
     const val `lagom-extensions` = "0.1.0"
-    const val swaggerCore = "2.0.7"
-    const val swaggerIntegration = "2.0.7"
+    const val swagger = "2.0.7"
     const val jacoco = "0.8.2"
     const val junit5 = "5.3.2"
     const val assertj = "3.11.1"
-    const val kotlintest = "3.3.2"
+    const val `json-unit` = "2.6.1"
 }
 
 val lagomVersion = project.properties["lagomVersion"] as String? ?: Versions.lagom
 val scalaBinaryVersion = project.properties["scalaBinaryVersion"] as String? ?: Versions.scalaBinary
 
 plugins {
-    kotlin("jvm") version "1.3.21"
-    id("org.jetbrains.dokka") version "0.9.17"
-    id("org.jlleitschuh.gradle.ktlint") version "6.3.1"
+    kotlin("jvm") version "1.3.30"
+    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jlleitschuh.gradle.ktlint") version "8.0.0"
     id("de.marcphilipp.nexus-publish") version "0.2.0"
     signing
     jacoco
@@ -48,8 +47,8 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(project(":java:lagom-openapi-java-api"))
     implementation("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
-    implementation("io.swagger.core.v3", "swagger-core", Versions.swaggerCore)
-    implementation("io.swagger.core.v3", "swagger-integration", Versions.swaggerIntegration)
+    implementation("io.swagger.core.v3", "swagger-core", Versions.swagger)
+    implementation("io.swagger.core.v3", "swagger-integration", Versions.swagger)
     implementation("io.github.config4k", "config4k", Versions.config4k)
     implementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     implementation("org.taymyr.lagom", "lagom-extensions-java_$scalaBinaryVersion", Versions.`lagom-extensions`)
@@ -58,6 +57,7 @@ dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter-params", Versions.junit5)
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", Versions.junit5)
     testImplementation("org.assertj", "assertj-core", Versions.assertj)
+    testImplementation("net.javacrumbs.json-unit", "json-unit-assertj", Versions.`json-unit`)
 }
 
 ktlint {
