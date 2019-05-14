@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi.autogenerate;
+package org.taymyr.lagom.openapi.autogenerate.empty;
 
 import com.typesafe.config.Config;
 import org.jetbrains.annotations.NotNull;

@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi.autogenerate;
+package org.taymyr.lagom.openapi.autogenerate.pets;
 
 import akka.NotUsed;
 import com.lightbend.lagom.javadsl.api.Descriptor;
@@ -37,7 +37,7 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
     ),
     tags = @Tag(name = "pets", description = "Pets tag")
 )
-public interface TestService extends OpenAPIService {
+public interface PetsService extends OpenAPIService {
 
     @Operation(
         operationId = "listPets",

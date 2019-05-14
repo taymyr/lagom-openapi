@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi.autogenerate;
+package org.taymyr.lagom.openapi.autogenerate.pets;
 
 import akka.NotUsed;
 import com.lightbend.lagom.javadsl.api.ServiceCall;
@@ -8,9 +8,9 @@ import org.taymyr.lagom.openapi.AbstractOpenAPIService;
 
 import java.util.Optional;
 
-public class TestServiceImpl extends AbstractOpenAPIService implements TestService {
+public class PetsServiceImpl extends AbstractOpenAPIService implements PetsService {
 
-    public TestServiceImpl(@NotNull Config config) {
+    public PetsServiceImpl(@NotNull Config config) {
         super(config);
     }
 

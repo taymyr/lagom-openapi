@@ -18,7 +18,7 @@ val lagomVersion = project.properties["lagomVersion"] as String? ?: Versions.lag
 val scalaBinaryVersion = project.properties["scalaBinaryVersion"] as String? ?: Versions.scalaBinary
 
 plugins {
-    kotlin("jvm") version "1.3.30"
+    kotlin("jvm")
     id("org.jetbrains.dokka") version "0.9.18"
     id("org.jlleitschuh.gradle.ktlint") version "8.0.0"
     id("de.marcphilipp.nexus-publish") version "0.2.0"

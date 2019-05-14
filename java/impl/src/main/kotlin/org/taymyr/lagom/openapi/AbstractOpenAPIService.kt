@@ -7,29 +7,22 @@ import com.lightbend.lagom.javadsl.server.HeaderServiceCall
 import com.typesafe.config.Config
 import io.github.config4k.extract
 import io.swagger.v3.core.util.Yaml
-import io.swagger.v3.lagom.ServiceReader
-import io.swagger.v3.lagom.isAnnotationPresentInherited
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
-import io.swagger.v3.oas.models.OpenAPI
 import mu.KLogging
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.JSON
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.YAML
 import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.fromFile
 import org.taymyr.lagom.javadsl.api.transport.ResponseHeaders.ok
-import java.util.Optional.ofNullable
+import org.taymyr.lagom.openapi.internal.ServiceReader
+import org.taymyr.lagom.openapi.internal.isAnnotationPresentInherited
 import java.util.concurrent.CompletableFuture.completedFuture
 
 abstract class AbstractOpenAPIService(config: Config) : OpenAPIService {
 
-    companion object : KLogging() {
-        private val OPENAPI_PATH = "openapi.file"
-    }
-
-    private val spec: SpecResponse
-
-    private var isAnnotated: Boolean = this.javaClass.isAnnotationPresentInherited(OpenAPIDefinition::class.java)
+    private val spec: OpenAPISpec
 
     init {
+        val isAnnotated: Boolean = this.javaClass.isAnnotationPresentInherited(OpenAPIDefinition::class.java)
         if (isAnnotated) {
             this.spec = generateSpecResource()
         } else {
@@ -37,17 +30,12 @@ abstract class AbstractOpenAPIService(config: Config) : OpenAPIService {
         }
     }
 
-    private fun generateSpecResource(): SpecResponse {
-        return SpecResponse(toYaml(ServiceReader().read(this)), YAML)
-    }
+    private fun generateSpecResource() = OpenAPISpec(Yaml.pretty(ServiceReader().read(this)), YAML)
 
-    private fun toYaml(swagger: OpenAPI) = Yaml.pretty(swagger)!!
-
-    private fun createSpecResponseFromResource(config: Config): SpecResponse {
+    private fun createSpecResponseFromResource(config: Config): OpenAPISpec {
         var spec: String? = null
         var protocol: MessageProtocol? = null
-        val configPath = config.extract<String?>(OPENAPI_PATH)
-        val paths = when (configPath) {
+        val paths = when (val configPath = config.extract<String?>(SPEC_CONFIG_PATH)) {
             null -> listOf("json", "yaml", "yml").map { "${descriptor().name()}.$it" }
             else -> listOf(configPath)
         }
@@ -58,21 +46,23 @@ abstract class AbstractOpenAPIService(config: Config) : OpenAPIService {
                 protocol = fromFile(filename)
                 logger.info { "Load OpenAPI specification from $openapiSpec" }
                 break
-            } catch (e: Exception) {
-                // do nothing
-            }
+            } catch (e: Exception) { }
         }
         if (spec == null) logger.error { "OpenAPI specification not found in $paths" }
-        return SpecResponse(spec, protocol ?: JSON)
+        return OpenAPISpec(spec, protocol ?: JSON)
     }
 
     override fun openapi(): HeaderServiceCall<NotUsed, String> {
         return HeaderServiceCall { _, _ ->
             completedFuture(
-                ok(spec.mimeType, ofNullable(spec.api).orElseThrow { NotFound("OpenAPI specification not found") })
+                ok(spec.mimeType, spec.api ?: throw NotFound("OpenAPI specification not found"))
             )
         }
     }
 
-    data class SpecResponse(val api: String?, var mimeType: MessageProtocol)
+    companion object : KLogging() {
+        private const val SPEC_CONFIG_PATH = "openapi.file"
+    }
+
+    private data class OpenAPISpec(val api: String?, var mimeType: MessageProtocol)
 }

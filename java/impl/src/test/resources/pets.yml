@@ -68,6 +68,7 @@ paths:
       - pets
       summary: Create a pet
       operationId: createPets
+      parameters: []
       responses:
         201:
           description: Null response
