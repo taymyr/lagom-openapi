@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi.autogenerate;
+package org.taymyr.lagom.openapi.autogenerate.pets;
 
 import java.util.List;
 
