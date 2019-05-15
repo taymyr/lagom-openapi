@@ -8,12 +8,6 @@ val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 val ossrhUsername: String? by project
 val ossrhPassword: String? by project
 
-object Versions {
-    const val scalaBinary = "2.12"
-    const val lagom = "1.4.12" // "1.5.1"
-    const val ktlint = "0.32.0"
-}
-
 val lagomVersion = project.properties["lagomVersion"] as String? ?: Versions.lagom
 val scalaBinaryVersion = project.properties["scalaBinaryVersion"] as String? ?: Versions.scalaBinary
 
@@ -32,7 +26,7 @@ compileKotlin.kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=enable", "
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    api("com.lightbend.lagom", "lagom-javadsl-api_$scalaBinaryVersion", lagomVersion)
+    compileOnly("com.lightbend.lagom", "lagom-javadsl-api_$scalaBinaryVersion", lagomVersion)
 }
 
 ktlint {
@@ -70,34 +64,7 @@ publishing {
             from(components["java"])
             artifact(sourcesJar)
             artifact(dokkaJar)
-            pom {
-                name.set("Taymyr: OpenAPI Java API")
-                description.set("OpenAPI module for Lagom framework")
-                url.set("https://taymyr.org")
-                organization {
-                    name.set("Digital Economy League")
-                    url.set("https://www.digitalleague.ru/")
-                }
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("taymyr")
-                        name.set("Taymyr Contributors")
-                        email.set("contributors@taymyr.org")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/taymyr/lagom-openapi.git")
-                    developerConnection.set("scm:git:https://github.com/taymyr/lagom-openapi.git")
-                    url.set("https://github.com/taymyr/lagom-openapi")
-                    tag.set("HEAD")
-                }
-            }
+            pom(Publishing.pom)
         }
     }
 }

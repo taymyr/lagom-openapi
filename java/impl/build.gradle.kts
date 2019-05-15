@@ -9,29 +9,15 @@ val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
 val ossrhUsername: String? by project
 val ossrhPassword: String? by project
 
-object Versions {
-    const val scalaBinary = "2.12"
-    const val lagom = "1.4.12" // "1.5.1"
-    const val ktlint = "0.32.0"
-    const val `kotlin-logging` = "1.6.10"
-    const val config4k = "0.4.1"
-    const val `lagom-extensions` = "0.1.0"
-    const val swagger = "2.0.7"
-    const val jacoco = "0.8.2"
-    const val junit5 = "5.3.2"
-    const val assertj = "3.11.1"
-    const val `json-unit` = "2.6.1"
-}
-
 val lagomVersion = project.properties["lagomVersion"] as String? ?: Versions.lagom
 val scalaBinaryVersion = project.properties["scalaBinaryVersion"] as String? ?: Versions.scalaBinary
 
 plugins {
     kotlin("jvm")
-    id("org.jetbrains.dokka") version "0.9.18"
-    id("org.jlleitschuh.gradle.ktlint") version "8.0.0"
-    id("de.marcphilipp.nexus-publish") version "0.2.0"
-    id("io.freefair.lombok") version "3.5.1"
+    id("org.jetbrains.dokka") version Versions.dokka
+    id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
+    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
+    id("io.freefair.lombok") version Versions.lombok
     signing
     jacoco
 }
@@ -48,11 +34,11 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     implementation(project(":java:lagom-openapi-java-api"))
+    compileOnly("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     implementation("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
     implementation("io.swagger.core.v3", "swagger-core", Versions.swagger)
     implementation("io.swagger.core.v3", "swagger-integration", Versions.swagger)
     implementation("io.github.config4k", "config4k", Versions.config4k)
-    implementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     implementation("org.taymyr.lagom", "lagom-extensions-java_$scalaBinaryVersion", Versions.`lagom-extensions`)
 
     testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit5)
@@ -60,6 +46,10 @@ dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", Versions.junit5)
     testImplementation("org.assertj", "assertj-core", Versions.assertj)
     testImplementation("net.javacrumbs.json-unit", "json-unit-assertj", Versions.`json-unit`)
+}
+
+configurations {
+    testCompile.get().extendsFrom(compileOnly.get())
 }
 
 ktlint {
@@ -114,34 +104,7 @@ publishing {
             from(components["java"])
             artifact(sourcesJar)
             artifact(dokkaJar)
-            pom {
-                name.set("Taymyr: OpenAPI Java API")
-                description.set("OpenAPI module for Lagom framework")
-                url.set("https://taymyr.org")
-                organization {
-                    name.set("Digital Economy League")
-                    url.set("https://www.digitalleague.ru/")
-                }
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("taymyr")
-                        name.set("Taymyr Contributors")
-                        email.set("contributors@taymyr.org")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:https://github.com/taymyr/lagom-openapi.git")
-                    developerConnection.set("scm:git:https://github.com/taymyr/lagom-openapi.git")
-                    url.set("https://github.com/taymyr/lagom-openapi")
-                    tag.set("HEAD")
-                }
-            }
+            pom(Publishing.pom)
         }
     }
 }

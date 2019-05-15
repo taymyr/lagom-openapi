@@ -2,8 +2,8 @@ val ossrhUsername: String? by project
 val ossrhPassword: String? by project
 
 plugins {
-    kotlin("jvm") version "1.3.30" apply false
-    id("io.codearte.nexus-staging") version "0.20.0"
+    kotlin("jvm") version Versions.kotlin apply false
+    id("io.codearte.nexus-staging") version Versions.`nexus-staging`
 }
 
 allprojects {
