@@ -12,7 +12,9 @@ private val doneSchema = Schema<Done>().name("Done").type("object")
 
 internal class DoneModelConverter : ModelConverter {
     override fun resolve(type: AnnotatedType, context: ModelConverterContext?, converters: MutableIterator<ModelConverter>): Schema<*>? =
-        if (type.type is Class<*> && (type.type as Class<*>).isAssignableFrom(Done::class.java)) doneSchema
-        else if (converters.hasNext()) converters.next().resolve(type, context, converters)
-        else null
+        when {
+            (type.type as? Class<*>)?.isAssignableFrom(Done::class.java) == true -> doneSchema
+            converters.hasNext() -> converters.next().resolve(type, context, converters)
+            else -> null
+        }
 }

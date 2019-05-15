@@ -1,10 +1,10 @@
 package org.taymyr.lagom.openapi.internal
 
+import com.lightbend.lagom.internal.javadsl.api.MethodRefResolver
 import com.lightbend.lagom.internal.javadsl.api.MethodRefServiceCallHolder
 import io.swagger.v3.core.converter.AnnotatedType
 import io.swagger.v3.core.converter.ModelConverters
 import io.swagger.v3.core.util.ReflectionUtils
-import sun.misc.SharedSecrets
 import java.lang.reflect.Method
 import java.lang.reflect.Type
 
@@ -17,15 +17,18 @@ internal fun <A : Annotation> Method.getAnnotationsInherited(aCls: Class<out A>)
 
 internal fun ModelConverters.resolveAsResolvedSchema(cls: Type) = this.resolveAsResolvedSchema(AnnotatedType().type(cls))!!
 
-internal fun MethodRefServiceCallHolder.toMethod(): Method {
-    val pool = SharedSecrets.getJavaLangAccess().getConstantPool(this.methodReference().javaClass)
-    for (i in 0 until pool.size) {
+internal fun MethodRefServiceCallHolder.toMethod(): Method = when (val methodReference = this.methodReference()) {
+    is Method -> methodReference
+    else -> {
         try {
-            val member = pool.getMethodAt(i)
-            if (member is Method && !member.declaringClass.name.startsWith("java.lang")) {
-                return member
-            }
-        } catch (t: Throwable) { }
+            MethodRefResolver.resolveMethodRef(methodReference)
+        } catch (t: Throwable) {
+            throw IllegalStateException(
+                """Unable to resolve method for service call.
+                Ensure that the you have passed a method reference (ie, this::someMethod). Passing anything else,
+                for example lambdas, anonymous classes or actual implementation classes, is forbidden in declaring a
+                service descriptor.""".trimIndent(), t
+            )
+        }
     }
-    throw IllegalArgumentException("Not a method reference")
 }

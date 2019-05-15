@@ -20,6 +20,7 @@ import org.taymyr.lagom.openapi.OpenAPIService;
 import java.util.Optional;
 
 import static com.lightbend.lagom.javadsl.api.Service.named;
+import static com.lightbend.lagom.javadsl.api.Service.pathCall;
 import static com.lightbend.lagom.javadsl.api.Service.restCall;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.PATH;
 import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
@@ -90,7 +91,7 @@ public interface PetsService extends OpenAPIService {
             )
         }
     )
-    ServiceCall<NotUsed, NotUsed> createPets();
+    ServiceCall<Pet, NotUsed> createPets();
 
     @Operation(
         operationId = "showPetById",
@@ -126,8 +127,8 @@ public interface PetsService extends OpenAPIService {
     default Descriptor descriptor() {
         return withOpenAPI(
             named("test").withCalls(
-                restCall(Method.GET, "/pets?limit", this::listPets),
-                restCall(Method.POST, "/pets", this::createPets),
+                pathCall("/pets?limit", this::listPets),
+                pathCall("/pets", this::createPets),
                 restCall(Method.GET, "/pets/:petId", this::showPetById)
             )
         );
