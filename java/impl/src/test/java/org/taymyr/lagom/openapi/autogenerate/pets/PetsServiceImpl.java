@@ -20,7 +20,7 @@ public class PetsServiceImpl extends AbstractOpenAPIService implements PetsServi
     }
 
     @Override
-    public ServiceCall<NotUsed, NotUsed> createPets() {
+    public ServiceCall<Pet, NotUsed> createPets() {
         return null;
     }
 

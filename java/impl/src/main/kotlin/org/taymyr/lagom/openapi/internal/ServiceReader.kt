@@ -1,5 +1,7 @@
 package org.taymyr.lagom.openapi.internal
 
+import akka.NotUsed
+import com.google.common.reflect.TypeToken
 import com.lightbend.lagom.internal.javadsl.api.MethodRefServiceCallHolder
 import com.lightbend.lagom.javadsl.api.Descriptor.Call
 import com.lightbend.lagom.javadsl.api.Descriptor.NamedCallId
@@ -7,6 +9,7 @@ import com.lightbend.lagom.javadsl.api.Descriptor.PathCallId
 import com.lightbend.lagom.javadsl.api.Descriptor.RestCallId
 import com.lightbend.lagom.javadsl.api.Descriptor.ServiceCallHolder
 import com.lightbend.lagom.javadsl.api.Service
+import com.lightbend.lagom.javadsl.api.ServiceCall
 import io.swagger.v3.core.util.AnnotationsUtils
 import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.Hidden
@@ -23,6 +26,7 @@ import io.swagger.v3.oas.models.PathItem.HttpMethod
 import io.swagger.v3.oas.models.Paths
 import io.swagger.v3.oas.models.media.Schema
 import java.lang.reflect.Method
+import java.lang.reflect.ParameterizedType
 import io.swagger.v3.oas.models.ExternalDocumentation as ModelExternalDocumentation
 import io.swagger.v3.oas.models.Operation as ModelOperation
 import io.swagger.v3.oas.models.security.SecurityRequirement as ModelSecurityRequirement
@@ -115,7 +119,7 @@ internal class ServiceReader {
         classTags.forEach { operation.addTagsItem(it) }
         operation.tags = operation.tags.distinct()
 
-        return PathOperation(call.opeapiPath, httpMethod(call), operation, operationModel.schemas)
+        return PathOperation(call.opeapiPath, httpMethod(call, method), operation, operationModel.schemas)
     }
 
     private fun readServiceCall(call: Call<*, *>) {
@@ -153,14 +157,19 @@ internal class ServiceReader {
             if (part.startsWith(":")) "{${part.substring(1)}}" else part
         }
 
-    private fun httpMethod(call: Call<*, *>): HttpMethod = when (val callId = call.callId()) {
+    private fun httpMethod(call: Call<*, *>, method: Method): HttpMethod = when (val callId = call.callId()) {
         is RestCallId -> HttpMethod.valueOf(callId.method().name())
-        else -> if (hasRequestBody(call)) HttpMethod.POST else HttpMethod.GET
+        else -> if (hasRequestBody(method)) HttpMethod.POST else HttpMethod.GET
     }
 
-    private fun hasRequestBody(call: Call<*, *>): Boolean {
-        // TODO
-        return false
+    private fun hasRequestBody(method: Method): Boolean {
+        @Suppress("UNCHECKED_CAST", "UnstableApiUsage")
+        val serviceCallType = (TypeToken.of(method.genericReturnType) as TypeToken<ServiceCall<*, *>>)
+            .getSupertype(ServiceCall::class.java)
+            .type as? ParameterizedType ?: throw IllegalStateException("ServiceCall is not a parameterized type?")
+        if (serviceCallType.actualTypeArguments.size != 2) throw IllegalStateException("ServiceCall does not have 2 type arguments?")
+        if (method.returnType != ServiceCall::class.java) throw IllegalArgumentException("Service calls must return ServiceCall, subtypes are not allowed")
+        return serviceCallType.actualTypeArguments[0] != NotUsed::class.java
     }
 
     data class PathOperation(
