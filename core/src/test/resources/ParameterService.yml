@@ -1,0 +1,23 @@
+openapi: 3.0.1
+info:
+  title: Test
+  description: Description
+  version: 1.0.0
+paths:
+  /test/{id}:
+    get:
+      operationId: test
+      parameters:
+        - name: id
+          in: path
+          description: parameter description
+          required: true
+          style: simple
+          allowReserved: true
+          schema:
+            type: string
+            description: the generated UUID
+            format: uuid
+            readOnly: true
+      responses: {}
+components: {}

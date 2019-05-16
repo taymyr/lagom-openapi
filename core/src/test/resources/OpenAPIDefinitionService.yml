@@ -1,0 +1,14 @@
+openapi: 3.0.1
+info:
+  title: Test
+  description: Description
+  version: 1.0.0
+  contact:
+    name: Name
+    email: mail@example.com
+    url: https://example.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+paths: {}
+components: {}

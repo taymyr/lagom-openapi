@@ -1,0 +1,30 @@
+openapi: 3.0.1
+info:
+  title: test
+  description: info
+  version: 0.0.1
+paths:
+  /cases:
+    get:
+      tags:
+        - cases
+      summary: Secured method example
+      operationId: test
+      responses:
+        201:
+          description: Null response
+components:
+  securitySchemes:
+    Security:
+      type: oauth2
+      description: Security Example
+    myOauth2Security:
+      type: oauth2
+      description: myOauthSecurity Description
+      $ref: '#/components/securitySchemes/Security'
+      flows:
+        implicit:
+          authorizationUrl: http://x.com
+          refreshUrl: ""
+          scopes:
+            write:pets: modify pets in your account

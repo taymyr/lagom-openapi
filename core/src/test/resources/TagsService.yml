@@ -1,0 +1,33 @@
+openapi: 3.0.1
+info:
+  title: Test
+  license:
+    name: MIT
+  version: 1.0.0
+tags:
+  - name: Definition First Tag
+  - name: Definition Second Tag full
+    description: desc definition
+  - name: Fourth Tag Full
+    description: desc
+    externalDocs:
+      description: docs desc
+  - name: Fifth Tag Full
+    description: desc class
+    externalDocs:
+      description: docs desc class
+paths:
+  /:
+    get:
+      tags:
+        - Third Tag
+        - Second Tag
+        - Fourth Tag Full
+        - Example Tag
+        - Fifth Tag Full
+        - Sixth Tag
+      operationId: test
+      responses:
+        default:
+          description: default response
+components: {}
