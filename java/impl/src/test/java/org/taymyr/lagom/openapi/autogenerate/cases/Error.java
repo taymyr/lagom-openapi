@@ -1,4 +1,4 @@
-package org.taymyr.lagom.openapi.autogenerate.pets;
+package org.taymyr.lagom.openapi.autogenerate.cases;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Value;

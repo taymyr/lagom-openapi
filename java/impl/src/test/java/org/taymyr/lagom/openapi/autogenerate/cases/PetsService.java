@@ -1,20 +1,30 @@
-package org.taymyr.lagom.openapi.autogenerate.pets;
+package org.taymyr.lagom.openapi.autogenerate.cases;
 
+import akka.Done;
 import akka.NotUsed;
 import com.lightbend.lagom.javadsl.api.Descriptor;
 import com.lightbend.lagom.javadsl.api.ServiceCall;
 import com.lightbend.lagom.javadsl.api.transport.Method;
+import com.typesafe.config.Config;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.OAuthFlows;
+import io.swagger.v3.oas.annotations.security.OAuthScope;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.jetbrains.annotations.NotNull;
+import org.taymyr.lagom.openapi.AbstractOpenAPIService;
 import org.taymyr.lagom.openapi.OpenAPIService;
 
 import java.util.Optional;
@@ -37,6 +47,16 @@ import static io.swagger.v3.oas.annotations.enums.ParameterIn.QUERY;
         url = "http://petstore.swagger.io/v1"
     ),
     tags = @Tag(name = "pets", description = "Pets tag")
+)
+@SecurityScheme(name = "myOauth2Security",
+    type = SecuritySchemeType.OAUTH2,
+    in = SecuritySchemeIn.HEADER,
+    description = "myOauthSecurity Description2",
+    flows = @OAuthFlows(implicit = @io.swagger.v3.oas.annotations.security.OAuthFlow(authorizationUrl = "http://x.com",
+        scopes = @OAuthScope(
+            name = "write:pets",
+            description = "modify pets in your account"))
+    )
 )
 public interface PetsService extends OpenAPIService {
 
@@ -80,7 +100,11 @@ public interface PetsService extends OpenAPIService {
         responses = {
             @ApiResponse(
                 responseCode = "201",
-                description = "Null response"
+                description = "Done response",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Done.class)
+                )
             ),
             @ApiResponse(
                 description = "Unexpected error",
@@ -91,7 +115,7 @@ public interface PetsService extends OpenAPIService {
             )
         }
     )
-    ServiceCall<Pet, NotUsed> createPets();
+    ServiceCall<Pet, Done> createPets();
 
     @Operation(
         operationId = "showPetById",
@@ -123,14 +147,75 @@ public interface PetsService extends OpenAPIService {
     )
     ServiceCall<NotUsed, Pets> showPetById(String petId);
 
+    @Hidden
+    @Operation(
+        operationId = "showPetById",
+        summary = "Info for a specific pet",
+        tags = "pets",
+        parameters = @Parameter(
+            description = "The id of the pet to retrieve",
+            name = "petId",
+            in = PATH,
+            schema = @Schema(implementation = String.class)
+        ),
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Pets.class)
+                ),
+                description = "Expected response to a valid request"
+            ),
+            @ApiResponse(
+                description = "unexpected error",
+                content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = Error.class)
+                )
+            )
+        }
+    )
+    ServiceCall<NotUsed, Pets> showPetByIdHidden(String petId);
+
     @Override
     default Descriptor descriptor() {
         return withOpenAPI(
             named("test").withCalls(
                 pathCall("/pets?limit", this::listPets),
                 pathCall("/pets", this::createPets),
-                restCall(Method.GET, "/pets/:petId", this::showPetById)
+                restCall(Method.GET, "/pets/:petId", this::showPetById),
+                restCall(Method.GET, "/pets/:petId", this::showPetByIdHidden)
             )
         );
     }
+
+    class Impl extends AbstractOpenAPIService implements PetsService {
+
+        public Impl(@NotNull Config config) {
+            super(config);
+        }
+
+        @Override
+        public ServiceCall<NotUsed, Pets> listPets(Optional<Integer> limit) {
+            return null;
+        }
+
+        @Override
+        public ServiceCall<Pet, Done> createPets() {
+            return null;
+        }
+
+        @Override
+        public ServiceCall<NotUsed, Pets> showPetById(String petId) {
+            return null;
+        }
+
+        @Override
+        public ServiceCall<NotUsed, Pets> showPetByIdHidden(String petId) {
+            return null;
+        }
+
+    }
+
 }

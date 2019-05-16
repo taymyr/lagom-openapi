@@ -57,20 +57,23 @@ internal val Operation.model: Model<ModelOperation> get() {
     val operation = ModelOperation()
         .summary(summary.model)
         .description(description.model)
-        .tags(tags.model)
+        .tags(tags.model.ifEmpty { null })
         .requestBody(requestBodyModel.underlying)
         .externalDocs(externalDocs.model)
         .operationId(operationId.model)
-        .parameters(parametersModel.map { it.underlying })
+        .parameters(parametersModel.map { it.underlying }.ifEmpty { null })
         .responses(responsesModel.underlying)
         .deprecated(deprecated)
         .security(security.model)
         .servers(servers.model)
     val schemas = mutableMapOf<String, ModelSchema<Any>>()
+    val links = mutableMapOf<String, ModelLink>()
     schemas.putAll(requestBodyModel.schemas)
     parametersModel.forEach { schemas.putAll(it.schemas) }
     schemas.putAll(responsesModel.schemas)
-    return Model(operation, schemas)
+    links.putAll(responsesModel.links)
+
+    return Model(operation, schemas, links)
 }
 
 internal val Array<SecurityRequirement>.model: List<ModelSecurityRequirement>? get() =
@@ -87,20 +90,18 @@ internal val SecuritySchemeType.model: ModelSecurityScheme.Type? get() =
 internal val SecuritySchemeIn.model: ModelSecurityScheme.In? get() =
     ModelSecurityScheme.In.values().find { it.toString() == this.toString() }
 
-internal val SecurityScheme.model: ModelSecurityScheme get() =
-    ModelSecurityScheme()
-        .`in`(`in`.model)
+internal val SecurityScheme.model: Pair<String, ModelSecurityScheme> get() {
+    val resScheme = ModelSecurityScheme()
         .type(type.model)
-        .openIdConnectUrl(openIdConnectUrl)
-        .scheme(scheme)
-        .bearerFormat(bearerFormat)
-        .description(description)
-        .name(paramName)
-        .`$ref`(ref)
-        .flows(flows.model)
-        .apply {
-            AnnotationsUtils.getExtensions(*this@model.extensions).forEach { addExtension(it.key, it.value) }
-        }
+        .description(description).`$ref`(ref.ifEmpty { null })
+    when (type.model) {
+        ModelSecurityScheme.Type.APIKEY -> resScheme.name(name).`in`(`in`.model)
+        ModelSecurityScheme.Type.HTTP -> resScheme.scheme(scheme).bearerFormat(bearerFormat)
+        ModelSecurityScheme.Type.OAUTH2 -> resScheme.flows(flows.model)
+        ModelSecurityScheme.Type.OPENIDCONNECT -> resScheme.openIdConnectUrl(openIdConnectUrl)
+    }
+    return Pair(name, resScheme)
+}
 
 internal val Array<OAuthScope>?.model: Scopes? get() =
     this?.let { Scopes().apply { this@model.forEach { addString(it.name, it.description) } } }
@@ -108,17 +109,22 @@ internal val Array<OAuthScope>?.model: Scopes? get() =
 internal fun OAuthFlow.isEmpty() =
     authorizationUrl.isBlank() && refreshUrl.isBlank() && tokenUrl.isBlank() && scopes.isNullOrEmpty() && extensions.isNullOrEmpty()
 
-internal val OAuthFlow?.model: ModelOAuthFlow? get() = when {
+private val OAuthFlow?.common: ModelOAuthFlow? get() = when {
     this == null || this.isEmpty() -> null
-    else -> ModelOAuthFlow()
-        .authorizationUrl(authorizationUrl)
-        .refreshUrl(refreshUrl)
-        .tokenUrl(tokenUrl)
-        .scopes(scopes.model)
-        .apply {
-            AnnotationsUtils.getExtensions(*this@model.extensions).forEach { addExtension(it.key, it.value) }
-        }
+    else -> {
+        ModelOAuthFlow()
+            .refreshUrl(refreshUrl)
+            .scopes(scopes.model)
+            .apply {
+                AnnotationsUtils.getExtensions(*this@common.extensions).forEach { addExtension(it.key, it.value) }
+            }
+    }
 }
+
+internal val OAuthFlow.implicitModel: ModelOAuthFlow? get() = common?.authorizationUrl(authorizationUrl)
+internal val OAuthFlow.authorizationCodeModel: ModelOAuthFlow? get() = common?.tokenUrl(tokenUrl)?.authorizationUrl(authorizationUrl)
+internal val OAuthFlow.clientCredentialsModel: ModelOAuthFlow? get() = common?.tokenUrl(tokenUrl)
+internal val OAuthFlow.passwordModel: ModelOAuthFlow? get() = common?.tokenUrl(tokenUrl)
 
 internal fun OAuthFlows.isEmpty() =
     authorizationCode.isEmpty() &&
@@ -130,10 +136,10 @@ internal fun OAuthFlows.isEmpty() =
 internal val OAuthFlows?.model: ModelOAuthFlows? get() = when {
     this == null || this.isEmpty() -> null
     else -> ModelOAuthFlows()
-        .authorizationCode(authorizationCode.model)
-        .clientCredentials(clientCredentials.model)
-        .implicit(implicit.model)
-        .password(password.model)
+        .authorizationCode(authorizationCode.authorizationCodeModel)
+        .clientCredentials(clientCredentials.clientCredentialsModel)
+        .implicit(implicit.implicitModel)
+        .password(password.passwordModel)
         .apply {
             AnnotationsUtils.getExtensions(*this@model.extensions).forEach { addExtension(it.key, it.value) }
         }
@@ -168,16 +174,16 @@ internal val Explode.model: Boolean? get() = when (this) {
 
 internal val String.model: String? get() = if (isNotBlank()) this else null
 
-internal val Array<String>.model: List<String>? get() =
-    if (isNotEmpty()) filter { it.isNotBlank() }
-    else null
+internal val Array<String>.model: List<String> get() = filter { it.isNotBlank() }
 
 internal val Array<ApiResponse>.model: Model<ModelApiResponses> get() {
     val model = ModelApiResponses()
     val schemas = mutableMapOf<String, ModelSchema<Any>>()
+    val links = mutableMapOf<String, ModelLink>()
     mapNotNull { it.model.underlying }.forEach { model.putAll(it) }
     map { it.model.schemas }.forEach { schemas.putAll(it) }
-    return Model(model.ifEmpty { null }, schemas)
+    map { it.model.links }.forEach { links.putAll(it) }
+    return Model(model.ifEmpty { null }, schemas, links)
 }
 
 internal val Array<Link>.model: Map<String, ModelLink>? get() =
@@ -186,7 +192,7 @@ internal val Array<Link>.model: Map<String, ModelLink>? get() =
 
 internal val Link.model: Map<String, ModelLink> get() =
     if (name.isBlank()) emptyMap()
-    else mapOf(name to ModelLink()
+    else mapOf(ref to ModelLink()
         .operationId(operationId.model)
         .operationRef(operationRef.model)
         .description(description.model)
@@ -214,7 +220,8 @@ internal val ApiResponse.model: Model<Map<String, ModelApiResponse>> get() {
         mutableMapOf<String, ModelSchema<Any>>().apply {
             putAll(headersModel.schemas)
             putAll(contentModel.schemas)
-        }
+        },
+        apiResponse.links ?: emptyMap()
     )
 }
 
@@ -262,7 +269,7 @@ internal val Schema.model: Model<ModelSchema<Any>> get() {
         .not(notSchema)
         .name(name.model ?: schema.name)
         .title(title.model ?: schema.title)
-        .required(requiredProperties.model ?: schema.required)
+        .required(requiredProperties.model.ifEmpty { null } ?: schema.required?.ifEmpty { null })
         .description(description.model ?: schema.description)
         .format(format.model ?: schema.format)
         .`$ref`(ref.model ?: schema.`$ref`)
@@ -299,7 +306,7 @@ internal val Parameter.model: Model<ModelParameter> get() {
 
 internal val ParameterStyle.model: StyleEnum? get() = when (this) {
     ParameterStyle.DEFAULT -> null
-    else -> StyleEnum.valueOf(this.toString())
+    else -> StyleEnum.valueOf(this.name)
 }
 
 internal val Array<Parameter>.model: List<Model<ModelParameter>> get() = map { it.model }
@@ -345,4 +352,8 @@ internal val Content.model: Model<ModelContent> get() =
         )
     }
 
-internal data class Model<M>(val underlying: M? = null, val schemas: Map<String, ModelSchema<Any>> = emptyMap())
+internal data class Model<M>(
+    val underlying: M? = null,
+    val schemas: Map<String, ModelSchema<Any>> = emptyMap(),
+    val links: Map<String, ModelLink> = emptyMap()
+)

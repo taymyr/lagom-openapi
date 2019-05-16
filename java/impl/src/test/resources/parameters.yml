@@ -1,0 +1,24 @@
+openapi: 3.0.1
+info:
+  title: test
+  description: info
+  version: 0.0.1
+paths:
+  /test1:
+    get:
+      parameters:
+        - name: subscriptionId
+          in: path
+          description: parameter description
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+          style: simple
+          allowReserved: true
+          schema:
+            type: string
+            description: the generated UUID
+            format: uuid
+      deprecated: false
+components:
+  schemas: {}

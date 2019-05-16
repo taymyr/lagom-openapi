@@ -24,6 +24,7 @@ import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.PathItem
 import io.swagger.v3.oas.models.PathItem.HttpMethod
 import io.swagger.v3.oas.models.Paths
+import io.swagger.v3.oas.models.links.Link
 import io.swagger.v3.oas.models.media.Schema
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
@@ -33,9 +34,7 @@ import io.swagger.v3.oas.models.security.SecurityRequirement as ModelSecurityReq
 import io.swagger.v3.oas.models.servers.Server as ModelServer
 import io.swagger.v3.oas.models.tags.Tag as ModelTag
 
-internal class ServiceReader {
-
-    private val spec: OpenAPI = OpenAPI()
+class ServiceReader(private val spec: OpenAPI = OpenAPI()) {
 
     private var classSecurityRequirements: List<ModelSecurityRequirement> = emptyList()
     private var classTags: List<String> = emptyList()
@@ -46,7 +45,7 @@ internal class ServiceReader {
         val serviceClass = service.javaClass
         if (serviceClass.isAnnotationPresent(Hidden::class.java)) return spec
 
-        init()
+        beforeRead()
         readDefinition(serviceClass)
         readSecuritySchemes(serviceClass)
 
@@ -56,12 +55,17 @@ internal class ServiceReader {
         readClassExternalDocumentation(serviceClass)
 
         readServiceCalls(service)
+        afterRead()
         return spec
     }
 
-    private fun init() {
-        spec.components = Components().schemas(mutableMapOf())
+    private fun beforeRead() {
+        spec.components = (spec.components ?: Components()).schemas(mutableMapOf()).links(mutableMapOf())
         spec.paths = Paths()
+    }
+
+    private fun afterRead() {
+        spec.components.links?.ifEmpty { spec.components.links(null) }
     }
 
     private fun readDefinition(clazz: Class<Service>) {
@@ -77,8 +81,8 @@ internal class ServiceReader {
 
     private fun readSecuritySchemes(clazz: Class<Service>) {
         clazz.getAnnotationsInherited(SecurityScheme::class.java)?.let { schemas ->
-            spec.components.securitySchemes =
-                schemas.map { it.model }.associateBy { it.name }
+            spec.components.securitySchemes = spec.components.securitySchemes ?: mutableMapOf()
+            spec.components.securitySchemes.putAll(schemas.map { it.model }.associateBy({ it.first }, { it.second }))
         }
     }
 
@@ -107,6 +111,9 @@ internal class ServiceReader {
     private fun readMethodTags(method: Method): List<ModelTag> =
         AnnotationsUtils.getTags(method.getAnnotationsInherited(Tag::class.java)?.toTypedArray(), true).orElse(emptySet()).toList()
 
+    private fun readMethodServers(method: Method): List<ModelServer> =
+        AnnotationsUtils.getServers(method.getAnnotationsInherited(Server::class.java)?.toTypedArray()).orElse(emptyList()).toList()
+
     private fun readMethodRefServiceCallHolder(call: Call<*, *>): PathOperation {
         val method = (call.serviceCallHolder() as MethodRefServiceCallHolder).toMethod()
         val operationModel = method.getAnnotationInherited(Operation::class.java)!!.model
@@ -114,12 +121,13 @@ internal class ServiceReader {
 
         classSecurityRequirements.forEach { operation.addSecurityItem(it) }
         classServers.forEach { operation.addServersItem(it) }
+        readMethodServers(method).forEach { operation.addServersItem(it) }
         operation.externalDocs = operation.externalDocs ?: classExternalDocumentation
         readMethodTags(method).forEach { operation.addTagsItem(it.name) }
         classTags.forEach { operation.addTagsItem(it) }
-        operation.tags = operation.tags.distinct()
+        operation.tags = operation.tags?.distinct()
 
-        return PathOperation(call.opeapiPath, httpMethod(call, method), operation, operationModel.schemas)
+        return PathOperation(call.opeapiPath, httpMethod(call, method), operation, operationModel.schemas, operationModel.links)
     }
 
     private fun readServiceCall(call: Call<*, *>) {
@@ -131,6 +139,7 @@ internal class ServiceReader {
         }
         spec.paths.getOrPut(pathOperation.path, { PathItem() }).operation(pathOperation.httpMethod, pathOperation.operation)
         pathOperation.schemas.forEach { spec.components.schemas.putIfAbsent(it.key, it.value) }
+        pathOperation.links.forEach { spec.components.links.putIfAbsent(it.key, it.value) }
     }
 
     private fun isNotHidden(callHolder: ServiceCallHolder): Boolean = when (callHolder) {
@@ -176,6 +185,7 @@ internal class ServiceReader {
         val path: String,
         val httpMethod: HttpMethod,
         val operation: ModelOperation,
-        val schemas: Map<String, Schema<Any>>
+        val schemas: Map<String, Schema<Any>>,
+        val links: Map<String, Link>
     )
 }
