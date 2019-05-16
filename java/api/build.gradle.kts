@@ -3,19 +3,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.net.URL
 
-val isReleaseVersion = !version.toString().endsWith("SNAPSHOT")
-
-val ossrhUsername: String? by project
-val ossrhPassword: String? by project
-
-val lagomVersion = project.properties["lagomVersion"] as String? ?: Versions.lagom
-val scalaBinaryVersion = project.properties["scalaBinaryVersion"] as String? ?: Versions.scalaBinary
-
 plugins {
     kotlin("jvm")
-    id("org.jetbrains.dokka") version "0.9.18"
-    id("org.jlleitschuh.gradle.ktlint") version "8.0.0"
-    id("de.marcphilipp.nexus-publish") version "0.2.0"
+    id("org.jetbrains.dokka") version Versions.dokka
+    id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
+    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
     signing
 }
 
@@ -36,13 +28,13 @@ ktlint {
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
-    classifier = "sources"
+    archiveClassifier.set("sources")
     from(sourceSets.main.get().allSource)
 }
 
 val dokkaJar by tasks.creating(Jar::class) {
     group = JavaBasePlugin.DOCUMENTATION_GROUP
-    classifier = "javadoc"
+    archiveClassifier.set("javadoc")
     from(tasks.dokka)
 }
 
@@ -53,7 +45,7 @@ tasks.dokka {
     reportUndocumented = true
     impliedPlatforms = mutableListOf("JVM")
     externalDocumentationLink(delegateClosureOf<DokkaConfiguration.ExternalDocumentationLink.Builder> {
-        url = URL("https://www.lagomframework.com/documentation/1.4.x/java/api/")
+        url = URL("https://www.lagomframework.com/documentation/1.5.x/java/api/")
     })
 }
 
@@ -69,7 +61,8 @@ publishing {
     }
 }
 
+@Suppress("UnstableApiUsage")
 signing {
-    isRequired = isReleaseVersion
+    isRequired = isRelease
     sign(publishing.publications["maven"])
 }

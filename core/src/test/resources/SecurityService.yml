@@ -1,0 +1,51 @@
+openapi: 3.0.1
+info:
+  title: test
+  description: info
+  version: 0.0.1
+paths:
+  /test1:
+    get:
+      description: description
+      operationId: Operation Id
+      responses:
+        default:
+          description: test description
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+        - security_key:
+            - write:pets
+            - generate:pets
+        - myOauth2Security:
+            - write:pets
+  /test2:
+    get:
+      description: description 2
+      operationId: Operation Id 2
+      responses:
+        default:
+          description: test description
+          content:
+            application/json:
+              schema:
+                type: string
+      security:
+        - security_key:
+            - write:pets
+            - generate:pets
+        - myOauth2Security:
+            - write:pets
+components:
+  securitySchemes:
+    myOauth2Security:
+      type: oauth2
+      description: myOauthSecurity Description
+      flows:
+        implicit:
+          authorizationUrl: http://x.com
+          refreshUrl: ""
+          scopes:
+            write:pets: modify pets in your account

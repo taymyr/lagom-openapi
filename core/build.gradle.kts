@@ -1,16 +1,14 @@
 @file:Suppress("UnstableApiUsage")
 
-import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-import java.net.URL
 
 plugins {
+    java
     kotlin("jvm")
     id("org.jetbrains.dokka") version Versions.dokka
     id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
     id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
-    id("io.freefair.lombok") version Versions.lombok
     signing
 }
 
@@ -18,21 +16,14 @@ val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions.jvmTarget = "1.8"
 compileKotlin.kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=enable", "-Xjsr305=strict")
 
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
-compileTestKotlin.kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=enable", "-Xjsr305=strict")
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    compile(project(":java:lagom-openapi-java-api"))
-    compile(project(":lagom-openapi-core"))
-    compileOnly("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
-    implementation("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
-    implementation("io.github.config4k", "config4k", Versions.config4k)
-    implementation("org.taymyr.lagom", "lagom-extensions-java_$scalaBinaryVersion", Versions.`lagom-extensions`)
+    compileOnly("com.lightbend.lagom", "lagom-server_$scalaBinaryVersion", lagomVersion)
+    compile("io.swagger.core.v3", "swagger-core", Versions.swagger)
+    compile("io.swagger.core.v3", "swagger-integration", Versions.swagger)
 
-    testImplementation(evaluationDependsOn(":lagom-openapi-core").sourceSets.test.get().output)
+    testImplementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit5)
     testImplementation("org.junit.jupiter", "junit-jupiter-params", Versions.junit5)
     testImplementation("org.junit.jupiter", "junit-jupiter-engine", Versions.junit5)
@@ -74,9 +65,6 @@ tasks.dokka {
     jdkVersion = 8
     reportUndocumented = true
     impliedPlatforms = mutableListOf("JVM")
-    externalDocumentationLink(delegateClosureOf<DokkaConfiguration.ExternalDocumentationLink.Builder> {
-        url = URL("https://www.lagomframework.com/documentation/1.5.x/java/api/")
-    })
 }
 
 publishing {
@@ -91,6 +79,7 @@ publishing {
     }
 }
 
+@Suppress("UnstableApiUsage")
 signing {
     isRequired = isRelease
     sign(publishing.publications["maven"])
