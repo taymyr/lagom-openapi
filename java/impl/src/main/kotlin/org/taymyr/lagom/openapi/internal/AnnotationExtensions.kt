@@ -2,11 +2,11 @@ package org.taymyr.lagom.openapi.internal
 
 import io.swagger.v3.core.converter.ModelConverters
 import io.swagger.v3.core.util.AnnotationsUtils
+import io.swagger.v3.core.util.ParameterProcessor
 import io.swagger.v3.oas.annotations.ExternalDocumentation
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.enums.Explode
-import io.swagger.v3.oas.annotations.enums.ParameterIn
 import io.swagger.v3.oas.annotations.enums.ParameterStyle
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
 import io.swagger.v3.oas.annotations.servers.Server
 import io.swagger.v3.oas.annotations.servers.ServerVariable
+import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.media.ArraySchema
 import io.swagger.v3.oas.models.media.MediaType
 import io.swagger.v3.oas.models.parameters.Parameter.StyleEnum
@@ -283,23 +284,24 @@ internal val Schema.model: Model<ModelSchema<Any>> get() {
 internal val Parameter.model: Model<ModelParameter> get() {
     val schemaModel = schema.model
     val contentModel = content.model
-    val parameter = ModelParameter()
-        .`in`(`in`.toString())
-        .name(name.model)
-        .description(description.model)
-        .required(required || `in` == ParameterIn.PATH)
-        .deprecated(deprecated)
-        .allowEmptyValue(allowEmptyValue)
-        .style(style.model)
-        .explode(explode.model)
-        .allowReserved(allowReserved)
-        .schema(schemaModel.underlying)
-        .content(contentModel.underlying)
+
+    val parameter = ModelParameter().`$ref`(ref.ifBlank { null })
+    val componentsContainer = Components()
     return Model(
-        if (parameter.`in`.isNullOrBlank() || parameter.name.isNullOrBlank()) null else parameter,
+        // TODO support form parameters if needed
+        ParameterProcessor.applyAnnotations(
+            if (parameter.getIn().isNullOrBlank() || parameter.`$ref`.isNullOrBlank()) parameter else null,
+            ParameterProcessor.getParameterType(this),
+            listOf(this),
+            componentsContainer,
+            arrayOfNulls(0),
+            arrayOfNulls(0),
+            null
+        ),
         mutableMapOf<String, ModelSchema<Any>>().apply {
             putAll(schemaModel.schemas)
             putAll(contentModel.schemas)
+            putAll(componentsContainer.schemas ?: emptyMap())
         }
     )
 }

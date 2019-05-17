@@ -11,14 +11,13 @@ paths:
           in: path
           description: parameter description
           required: true
-          deprecated: false
-          allowEmptyValue: false
           style: simple
           allowReserved: true
           schema:
             type: string
             description: the generated UUID
             format: uuid
+            readOnly: true
       deprecated: false
 components:
   schemas: {}

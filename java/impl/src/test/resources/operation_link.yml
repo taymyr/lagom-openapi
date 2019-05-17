@@ -11,10 +11,6 @@ paths:
         - name: userId
           in: query
           description: User identity
-          required: false
-          deprecated: false
-          allowEmptyValue: false
-          allowReserved: false
           schema:
             type: string
       responses:

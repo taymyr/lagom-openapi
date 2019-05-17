@@ -1,0 +1,39 @@
+openapi: 3.0.1
+info:
+  title: test
+  description: info
+  version: 0.0.1
+paths:
+  /test:
+    get:
+      description: array schema param test
+      operationId: test
+      parameters:
+        - name: arrayParameter
+          in: query
+          required: true
+          schema:
+            maxItems: 10
+            minItems: 1
+            uniqueItems: true
+            type: array
+            items:
+              $ref: '#/components/schemas/SubscriptionResponse'
+      responses:
+        default:
+          description: test description
+          content:
+            '*/*':
+              schema:
+                type: object
+                properties:
+                  subscriptionId:
+                    type: string
+      deprecated: false
+components:
+  schemas:
+    SubscriptionResponse:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
