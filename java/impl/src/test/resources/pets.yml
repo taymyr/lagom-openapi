@@ -21,10 +21,6 @@ paths:
         - name: limit
           in: query
           description: How many items to return at one time (max 100)
-          required: false
-          deprecated: false
-          allowEmptyValue: false
-          allowReserved: false
           schema:
             type: integer
             format: int32
@@ -106,9 +102,6 @@ paths:
           in: path
           description: The id of the pet to retrieve
           required: true
-          deprecated: false
-          allowEmptyValue: false
-          allowReserved: false
           schema:
             type: string
       responses:
