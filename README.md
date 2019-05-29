@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/taymyr/lagom-openapi.svg?branch=master)](https://travis-ci.org/taymyr/lagom-openapi)
 [![Javadoc API](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-api.svg?label=javadoc%20api)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-api)
 [![Javadoc Impl](https://www.javadoc.io/badge/org.taymyr.lagom/lagom-openapi-java-impl.svg?label=javadoc%20impl)](https://www.javadoc.io/doc/org.taymyr.lagom/lagom-openapi-java-impl)
-[![codecov](https://codecov.io/gh/taymyr/lagom-openapi-java/branch/develop/graph/badge.svg)](https://codecov.io/gh/taymyr/lagom-openapi-java)
+[![codecov](https://codecov.io/gh/taymyr/lagom-openapi/branch/master/graph/badge.svg)](https://codecov.io/gh/taymyr/lagom-openapi)
 [![Maven](https://img.shields.io/maven-central/v/org.taymyr.lagom/lagom-openapi-java.svg)](https://search.maven.org/search?q=a:lagom-openapi-java%20AND%20g:org.taymyr.lagom)
 
 # OpenAPI service for Lagom
