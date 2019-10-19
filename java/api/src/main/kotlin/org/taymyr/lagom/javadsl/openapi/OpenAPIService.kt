@@ -5,6 +5,7 @@ import com.lightbend.lagom.javadsl.api.Descriptor
 import com.lightbend.lagom.javadsl.api.Service
 import com.lightbend.lagom.javadsl.api.Service.pathCall
 import com.lightbend.lagom.javadsl.api.ServiceCall
+import java.util.Optional
 import kotlin.reflect.jvm.javaMethod
 
 /**
@@ -14,9 +15,10 @@ interface OpenAPIService : Service {
 
     /**
      * Return OpenAPI specification for current service.
+     * @param format Format of OpenAPI specification. Can be `json` or `yaml`.
      * @return OpenAPI specification
      */
-    fun openapi(): ServiceCall<NotUsed, String>
+    fun openapi(format: Optional<String>): ServiceCall<NotUsed, String>
 
     @JvmDefault
     fun withOpenAPI(descriptor: Descriptor): Descriptor = descriptor.withCalls(

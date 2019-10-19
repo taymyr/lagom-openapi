@@ -14,11 +14,11 @@ trait OpenAPIService {
    * Return OpenAPI specification for current service.
    * @return OpenAPI specification
    */
-  def openapi(): ServiceCall[NotUsed, String]
+  def openapi(format: Option[String]): ServiceCall[NotUsed, String]
 
   def withOpenAPI(descriptor: Descriptor): Descriptor = {
     descriptor.addCalls(
-      pathCall(s"/_${descriptor.name}/openapi", openapi _)
+      pathCall(s"/_${descriptor.name}/openapi?format", openapi _)
     )
   }
 

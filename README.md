@@ -15,9 +15,9 @@ Also, you can see how to generate OpenAPI Specification for Lagom service on dem
 
 ## Versions compatibility
 
-| Lagom OpenAPI | OpenAPI / Swagger | Lagom           | Scala          |
-|---------------|-------------------|-----------------|----------------|
-| 1.0.+         | 2.0.7+            | 1.4.+ <br> 1.5.+| 2.11 <br> 2.12 |
+| Lagom OpenAPI | OpenAPI / Swagger | Lagom 1.4          | Lagom 1.5          | Lagom 1.6          | Scala 2.11         | Scala 2.12         | Scala 2.13         |
+|:-------------:|:-----------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| 1.+           | 2.0.7+            | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: | :white_check_mark: |
 
 # How to use
 
@@ -118,7 +118,7 @@ class MyServiceImpl(override val config: Config)
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
 ```bash
-curl "http://localhost:9000/_<service_name>/openapi"
+curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 ``` 
 
 ## 1.2 Generate (Java DSL)
@@ -255,7 +255,7 @@ public class MyServiceImpl extends AbstractOpenAPIService implements MyService {
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
 ```bash
-curl "http://localhost:9000/_<service_name>/openapi"
+curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 ``` 
 
 ## 2.1 Static (Scala DSL)
@@ -333,7 +333,7 @@ or use a custom route
 override def descriptor: Descriptor = named("service")
     .withCalls(
       ...
-      pathCall("/custom/route", openapi)
+      pathCall("/custom/route?format", openapi)
     )
 ```
 
@@ -354,7 +354,7 @@ class MyServiceImpl(override val config: Config)
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
 ```bash
-curl "http://localhost:9000/_<service_name>/openapi"
+curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 ``` 
 
 
@@ -466,7 +466,7 @@ default Descriptor descriptor() {
   return named("service")
     .withCalls(
       ...
-      pathCall("/custom/route", this::openapi)
+      pathCall("/custom/route?format", this::openapi)
     );
 }
 ```
@@ -486,7 +486,7 @@ public class MyServiceImpl extends AbstractOpenAPIService implements MyService {
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
 ```bash
-curl "http://localhost:9000/_<service_name>/openapi"
+curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 ``` 
 
 ## Contributions

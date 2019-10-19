@@ -7,11 +7,13 @@ import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.lightbend.lagom.scaladsl.api.transport.ResponseHeader
 import com.lightbend.lagom.scaladsl.server.ServerServiceCall
 import com.typesafe.config.Config
+import io.swagger.v3.core.util.Json
 import io.swagger.v3.core.util.ReflectionUtils
 import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.taymyr.lagom.internal.openapi.Utils._
 
 import scala.concurrent.Future
 import scala.util.control.Breaks._
@@ -26,8 +28,10 @@ trait OpenAPIServiceImpl extends OpenAPIService with Service {
   val JSON: MessageProtocol    = MessageProtocol.fromContentTypeHeader(Some("application/json"))
   val SPEC_CONFIG_PATH: String = "openapi.file"
 
-  private def generateSpecResource() =
-    OpenAPISpec(Yaml.pretty(new SpecGenerator().generate(this)), YAML)
+  private def generateSpecResource(): OpenAPISpec = {
+    val api = new SpecGenerator().generate(this)
+    OpenAPISpec(Json.pretty(api), Yaml.pretty(api))
+  }
 
   private def fromFile(file: String, default: MessageProtocol): MessageProtocol = {
     file.substring(file.lastIndexOf(".") + 1) match {
@@ -61,7 +65,11 @@ trait OpenAPIServiceImpl extends OpenAPIService with Service {
       }
     }
     if (spec == null) log.error(s"OpenAPI specification not found in $paths")
-    OpenAPISpec(spec, if (protocol == null) JSON else protocol)
+    protocol match {
+      case JSON => OpenAPISpec(spec, jsonToYaml(spec))
+      case YAML => OpenAPISpec(yamlToJson(spec), spec)
+      case _    => OpenAPISpec(null, null)
+    }
   }
 
   private lazy val spec: OpenAPISpec = {
@@ -73,11 +81,17 @@ trait OpenAPIServiceImpl extends OpenAPIService with Service {
     }
   }
 
-  override def openapi = ServerServiceCall { (_, _) =>
-    if (spec == null || spec.api == null) throw NotFound("OpenAPI specification not found")
-    Future.successful((ResponseHeader.Ok.withProtocol(spec.mimeType), spec.api))
+  private def response(spec: String, protocol: MessageProtocol) =
+    (ResponseHeader.Ok.withProtocol(protocol), spec)
+
+  override def openapi(format: Option[String]) = ServerServiceCall { (_, _) =>
+    if (spec == null || spec.json == null || spec.yaml == null) throw NotFound("OpenAPI specification not found")
+    Future.successful(
+      if (format.exists(f => f.equalsIgnoreCase("json"))) response(spec.json, JSON)
+      else response(spec.yaml, YAML)
+    )
   }
 
-  private case class OpenAPISpec(api: String, mimeType: MessageProtocol)
+  private case class OpenAPISpec(json: String, yaml: String)
 
 }
