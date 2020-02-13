@@ -1,5 +1,8 @@
 language: java
 
+jdk:
+  - openjdk8
+
 env:
   - SCALA_VERSION=2.11
   - SCALA_VERSION=2.12

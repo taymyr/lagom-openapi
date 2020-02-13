@@ -1,8 +1,10 @@
 package org.taymyr.lagom.javadsl.openapi
 
 import akka.NotUsed
+import akka.japi.Pair
 import com.lightbend.lagom.javadsl.api.transport.MessageProtocol
 import com.lightbend.lagom.javadsl.api.transport.NotFound
+import com.lightbend.lagom.javadsl.api.transport.ResponseHeader.OK
 import com.lightbend.lagom.javadsl.server.HeaderServiceCall
 import com.typesafe.config.Config
 import io.github.config4k.extract
@@ -10,11 +12,11 @@ import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import mu.KLogging
 import org.taymyr.lagom.internal.openapi.isAnnotationPresentInherited
-import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.JSON
-import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.YAML
-import org.taymyr.lagom.javadsl.api.transport.MessageProtocols.fromFile
-import org.taymyr.lagom.javadsl.api.transport.ResponseHeaders.ok
+import java.util.Optional
 import java.util.concurrent.CompletableFuture.completedFuture
+
+internal val YAML: MessageProtocol = MessageProtocol.fromContentTypeHeader(Optional.of("application/x-yaml"))
+internal val JSON: MessageProtocol = MessageProtocol.fromContentTypeHeader(Optional.of("application/json"))
 
 abstract class AbstractOpenAPIService(config: Config? = null) : OpenAPIService {
 
@@ -26,6 +28,13 @@ abstract class AbstractOpenAPIService(config: Config? = null) : OpenAPIService {
             createSpecResponseFromResource(config)
         }
     }
+
+    private fun fromFile(file: String, default: MessageProtocol): MessageProtocol =
+        when (file.substring(file.lastIndexOf(".") + 1)) {
+            "json" -> JSON
+            "yaml", "yml" -> YAML
+            else -> default
+        }
 
     private fun generateSpecResource() =
         OpenAPISpec(Yaml.pretty(SpecGenerator().generate(this)), YAML)
@@ -41,7 +50,7 @@ abstract class AbstractOpenAPIService(config: Config? = null) : OpenAPIService {
             try {
                 val openapiSpec = this.javaClass.getResource("/$filename")
                 spec = openapiSpec.readText()
-                protocol = fromFile(filename)
+                protocol = fromFile(filename, YAML)
                 logger.info { "Load OpenAPI specification from $openapiSpec" }
                 break
             } catch (e: Exception) { }
@@ -53,7 +62,10 @@ abstract class AbstractOpenAPIService(config: Config? = null) : OpenAPIService {
     override fun openapi(): HeaderServiceCall<NotUsed, String> {
         return HeaderServiceCall { _, _ ->
             completedFuture(
-                ok(spec.mimeType, spec.api ?: throw NotFound("OpenAPI specification not found"))
+                Pair.create(
+                    OK.withProtocol(spec.mimeType),
+                    spec.api ?: throw NotFound("OpenAPI specification not found")
+                )
             )
         }
     }
