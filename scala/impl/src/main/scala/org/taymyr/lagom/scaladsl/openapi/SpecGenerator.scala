@@ -49,17 +49,16 @@ class SpecGenerator(spec: OpenAPI = new OpenAPI()) extends InternalServiceReader
   private def parseServiceInfo(service: Service): LagomServiceInfo = {
     val serviceClass = service.getClass
     val calls: List[LagomCallInfo] = service.descriptor.calls
-      .map(
-        call =>
-          call.serviceCallHolder match {
-            case serviceCall: ScalaMethodServiceCall[_, _] =>
-              val method = serviceCall.method
-              new LagomCallInfo(method, opeapiPath(call), httpMethod(call, method).name())
-            case _ =>
-              throw new IllegalArgumentException(
-                "Undefined type of ServiceCallHolder, only ScalaMethodServiceCall is supported at the moment"
-              )
-          }
+      .map(call =>
+        call.serviceCallHolder match {
+          case serviceCall: ScalaMethodServiceCall[_, _] =>
+            val method = serviceCall.method
+            new LagomCallInfo(method, opeapiPath(call), httpMethod(call, method).name())
+          case _ =>
+            throw new IllegalArgumentException(
+              "Undefined type of ServiceCallHolder, only ScalaMethodServiceCall is supported at the moment"
+            )
+        }
       )
       .toList
     new LagomServiceInfo(serviceClass, calls.asJava)
