@@ -1,8 +1,8 @@
 @Suppress("ObjectPropertyName")
 object Versions {
-    const val kotlin = "1.3.30"
-    const val scalaBinary = "2.12"
-    const val lagom = "1.5.1" // "1.4.13"
+    const val kotlin = "1.3.61"
+    const val scalaBinary = "2.13"
+    const val lagom = "1.6.0" // "1.4.13"
     const val ktlint = "0.32.0"
     const val `ktlint-plugin` = "8.0.0"
     const val `kotlin-logging` = "1.6.10"
@@ -16,6 +16,6 @@ object Versions {
     const val `nexus-publish` = "0.2.0"
     const val dokka = "0.9.18"
     const val lombok = "3.5.1"
-    const val `scalafmt-plugin` = "1.8.0"
-    const val scalatest = "3.0.7"
+    const val `scalafmt-plugin` = "1.13.0"
+    const val scalatest = "3.0.8"
 }

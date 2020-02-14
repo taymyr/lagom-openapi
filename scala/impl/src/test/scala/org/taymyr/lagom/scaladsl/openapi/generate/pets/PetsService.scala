@@ -29,7 +29,8 @@ import org.taymyr.lagom.scaladsl.openapi.OpenAPIService
   info = new Info(
     version = "1.0.0",
     title = "Swagger Petstore",
-    description = "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
+    description =
+      "A sample API that uses a petstore as an example to demonstrate features in the OpenAPI 3.0 specification",
     termsOfService = "http://swagger.io/terms/",
     contact = new Contact(name = "Swagger API Team", email = "apiteam@swagger.io", url = "http://swagger.io"),
     license = new License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html")
@@ -60,12 +61,17 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(
         responseCode = "200",
         description = "pet response",
-        content =
-          Array(new Content(mediaType = "application/json", array = new ArraySchema(schema = new Schema(implementation = classOf[Pet]))))
+        content = Array(
+          new Content(
+            mediaType = "application/json",
+            array = new ArraySchema(schema = new Schema(implementation = classOf[Pet]))
+          )
+        )
       ),
       new ApiResponse(
         description = "unexpected error",
-        content = Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+        content =
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
       )
     )
   )
@@ -77,7 +83,8 @@ trait PetsService extends OpenAPIService with Service {
     requestBody = new RequestBody(
       description = "Pet to add to the store",
       required = true,
-      content = Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[NewPet])))
+      content =
+        Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[NewPet])))
     ),
     responses = Array(
       new ApiResponse(
@@ -87,7 +94,8 @@ trait PetsService extends OpenAPIService with Service {
       ),
       new ApiResponse(
         description = "unexpected error",
-        content = Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+        content =
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
       )
     )
   )
@@ -113,7 +121,8 @@ trait PetsService extends OpenAPIService with Service {
       ),
       new ApiResponse(
         description = "unexpected error",
-        content = Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+        content =
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
       )
     )
   )
@@ -135,7 +144,8 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(responseCode = "204", description = "pet deleted"),
       new ApiResponse(
         description = "unexpected error",
-        content = Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+        content =
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
       )
     )
   )
