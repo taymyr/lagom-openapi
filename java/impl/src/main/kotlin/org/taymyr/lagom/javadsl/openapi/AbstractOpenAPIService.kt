@@ -7,7 +7,6 @@ import com.lightbend.lagom.javadsl.api.transport.NotFound
 import com.lightbend.lagom.javadsl.api.transport.ResponseHeader.OK
 import com.lightbend.lagom.javadsl.server.HeaderServiceCall
 import com.typesafe.config.Config
-import io.github.config4k.extract
 import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import mu.KLogging
@@ -42,9 +41,10 @@ abstract class AbstractOpenAPIService(config: Config? = null) : OpenAPIService {
     private fun createSpecResponseFromResource(config: Config?): OpenAPISpec {
         var spec: String? = null
         var protocol: MessageProtocol? = null
-        val paths = when (val configPath = config?.extract<String?>(SPEC_CONFIG_PATH)) {
-            null -> listOf("json", "yaml", "yml").map { "${descriptor().name()}.$it" }
-            else -> listOf(configPath)
+        val paths = if (config != null && config.hasPath(SPEC_CONFIG_PATH)) {
+            listOf(config.getString(SPEC_CONFIG_PATH))
+        } else {
+            listOf("json", "yaml", "yml").map { "${descriptor().name()}.$it" }
         }
         for (filename in paths) {
             try {
