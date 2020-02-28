@@ -6,7 +6,6 @@ object Versions {
     const val ktlint = "0.32.0"
     const val `ktlint-plugin` = "8.0.0"
     const val `kotlin-logging` = "1.6.10"
-    const val config4k = "0.4.1"
     const val swagger = "2.0.7"
     const val jacoco = "0.8.4"
     const val junit5 = "5.3.2"
