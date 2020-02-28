@@ -20,8 +20,8 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     compileOnly("com.lightbend.lagom", "lagom-server_$scalaBinaryVersion", lagomVersion)
-    compile("io.swagger.core.v3", "swagger-core", Versions.swagger)
-    compile("io.swagger.core.v3", "swagger-integration", Versions.swagger)
+    api("io.swagger.core.v3", "swagger-core", Versions.swagger)
+    api("io.swagger.core.v3", "swagger-integration", Versions.swagger)
 
     testImplementation("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
     testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit5)

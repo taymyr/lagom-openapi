@@ -8,8 +8,8 @@ plugins {
 }
 
 dependencies {
-    compile(project(":scala:lagom-openapi-scala-api"))
-    compile(project(":lagom-openapi-core"))
+    implementation(project(":scala:lagom-openapi-scala-api"))
+    implementation(project(":lagom-openapi-core"))
     compileOnly("com.lightbend.lagom", "lagom-scaladsl-server_$scalaBinaryVersion", lagomVersion)
 
     testImplementation("org.scalatest", "scalatest_$scalaBinaryVersion", Versions.scalatest)
