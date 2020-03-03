@@ -62,8 +62,10 @@ val dokkaJar by tasks.creating(Jar::class) {
 tasks.dokka {
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
-    jdkVersion = 8
-    reportUndocumented = true
+    configuration {
+        jdkVersion = 8
+        reportUndocumented = true
+    }
     impliedPlatforms = mutableListOf("JVM")
 }
 
