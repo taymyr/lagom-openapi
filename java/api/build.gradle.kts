@@ -1,4 +1,3 @@
-import org.jetbrains.dokka.DokkaConfiguration
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 import java.net.URL
@@ -41,12 +40,14 @@ val dokkaJar by tasks.creating(Jar::class) {
 tasks.dokka {
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
-    jdkVersion = 8
-    reportUndocumented = true
+    configuration {
+        jdkVersion = 8
+        reportUndocumented = true
+        externalDocumentationLink {
+            url = URL("https://www.lagomframework.com/documentation/1.6.x/java/api/")
+        }
+    }
     impliedPlatforms = mutableListOf("JVM")
-    externalDocumentationLink(delegateClosureOf<DokkaConfiguration.ExternalDocumentationLink.Builder> {
-        url = URL("https://www.lagomframework.com/documentation/1.5.x/java/api/")
-    })
 }
 
 publishing {
