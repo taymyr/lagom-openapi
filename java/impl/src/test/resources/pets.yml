@@ -48,7 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/LagomError'
     post:
       description: Creates a new pet in the store.  Duplicates are allowed
       operationId: create
@@ -71,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/LagomError'
   /pets/{id}:
     get:
       description: Returns a user based on a single ID, if the user does not have access to the pet
@@ -96,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/LagomError'
     delete:
       description: deletes a single pet based on the ID supplied
       operationId: delete
@@ -116,7 +116,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/LagomError'
 components:
   schemas:
     Pet:
@@ -143,14 +143,15 @@ components:
         tag:
           type: string
 
-    Error:
+    LagomError:
       type: object
       required:
-        - code
-        - message
+        - detail
+        - name
       properties:
-        code:
-          type: integer
-          format: int32
-        message:
+        name:
           type: string
+          description: "Exception name"
+        detail:
+          type: string
+          description: "Exception detail message"

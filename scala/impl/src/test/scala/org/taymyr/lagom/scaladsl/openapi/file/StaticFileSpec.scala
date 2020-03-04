@@ -2,13 +2,13 @@ package org.taymyr.lagom.scaladsl.openapi.file
 
 import com.lightbend.lagom.scaladsl.api.transport.NotFound
 import com.typesafe.config.ConfigFactory
-import org.scalatest.WordSpec
+import org.scalatest.wordspec.AnyWordSpec
 import org.taymyr.lagom.internal.openapi.TestUtils.resourceAsString
 import org.taymyr.lagom.internal.openapi.Utils._
 import org.taymyr.lagom.scaladsl.openapi.OpenAPISpec
 import play.libs.Json
 
-class StaticFileSpec extends WordSpec with OpenAPISpec {
+class StaticFileSpec extends AnyWordSpec with OpenAPISpec {
 
   "Service without config" should {
     "return default json spec" in {

@@ -18,6 +18,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
     compileOnly("com.lightbend.lagom", "lagom-javadsl-api_$scalaBinaryVersion", lagomVersion)
+    compileOnly("io.swagger.core.v3", "swagger-annotations", Versions.swagger)
 }
 
 ktlint {
