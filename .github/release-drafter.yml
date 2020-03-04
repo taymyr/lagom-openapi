@@ -10,14 +10,13 @@ categories:
       - 'dependency'
 
 template: |
-  ## :mega: Lagom OpenAPI released!
+  # :mega: Lagom OpenAPI X.Y.Z released!
 
   We are pleased to announce the release of OpenAPI module for [Lagom](https://www.lagomframework.com/) framework.
 
   ## :green_book: What’s Changed
 
-  All the changes you can see on the corresponding page of
-  [GitHub Milestone](https://github.com/taymyr/lagom-openapi/milestone/2?closed=1)
+  All the changes you can see on the corresponding page of [GitHub Milestone](https://github.com/taymyr/lagom-openapi/milestone/2?closed=1)
 
   $CHANGES
 
