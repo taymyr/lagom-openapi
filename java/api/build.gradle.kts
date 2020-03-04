@@ -6,7 +6,6 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.dokka") version Versions.dokka
     id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
-    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
     signing
 }
 
@@ -43,7 +42,7 @@ tasks.dokka {
     outputDirectory = "$buildDir/javadoc"
     configuration {
         jdkVersion = 8
-        reportUndocumented = true
+        reportUndocumented = false
         externalDocumentationLink {
             url = URL("https://www.lagomframework.com/documentation/1.6.x/java/api/")
         }
