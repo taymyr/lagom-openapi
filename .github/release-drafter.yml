@@ -1,4 +1,26 @@
+categories:
+  - title: ':rocket: Features'
+    labels:
+      - 'enhancement'
+  - title: ':bug: Bug Fixes'
+    labels:
+      - 'bug'
+  - title: ':dart: Dependencies'
+    labels:
+      - 'dependency'
+
 template: |
-  ## What’s Changed
+  ## :mega: Lagom OpenAPI released!
+
+  We are pleased to announce the release of OpenAPI module for [Lagom](https://www.lagomframework.com/) framework.
+
+  ## :green_book: What’s Changed
+
+  All the changes you can see on the corresponding page of
+  [GitHub Milestone](https://github.com/taymyr/lagom-openapi/milestone/2?closed=1)
 
   $CHANGES
+
+  ## :bow: Credits
+
+  Special thanks to the following contributors who helped with this release: $CONTRIBUTORS
