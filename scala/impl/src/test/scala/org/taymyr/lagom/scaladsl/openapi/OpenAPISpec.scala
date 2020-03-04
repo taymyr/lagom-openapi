@@ -1,7 +1,7 @@
 package org.taymyr.lagom.scaladsl.openapi
 
 import com.fasterxml.jackson.databind.JsonNode
-import org.scalatest.Matchers
+import org.scalatest.matchers.should.Matchers
 import play.libs.Json
 import org.taymyr.lagom.internal.openapi.Utils._
 

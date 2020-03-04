@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.parameters.RequestBody
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.servers.Server
+import org.taymyr.lagom.scaladsl.openapi.LagomError
 import org.taymyr.lagom.scaladsl.openapi.OpenAPIService
 
 @OpenAPIDefinition(
@@ -71,7 +72,7 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(
         description = "unexpected error",
         content =
-          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[LagomError])))
       )
     )
   )
@@ -95,7 +96,7 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(
         description = "unexpected error",
         content =
-          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[LagomError])))
       )
     )
   )
@@ -122,7 +123,7 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(
         description = "unexpected error",
         content =
-          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[LagomError])))
       )
     )
   )
@@ -145,7 +146,7 @@ trait PetsService extends OpenAPIService with Service {
       new ApiResponse(
         description = "unexpected error",
         content =
-          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[Error])))
+          Array(new Content(mediaType = "application/json", schema = new Schema(implementation = classOf[LagomError])))
       )
     )
   )

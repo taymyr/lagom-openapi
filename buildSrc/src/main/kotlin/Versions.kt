@@ -16,5 +16,5 @@ object Versions {
     const val dokka = "0.10.1"
     const val lombok = "4.1.6"
     const val `scalafmt-plugin` = "1.13.0"
-    const val scalatest = "3.0.8"
+    const val scalatest = "3.1.1"
 }

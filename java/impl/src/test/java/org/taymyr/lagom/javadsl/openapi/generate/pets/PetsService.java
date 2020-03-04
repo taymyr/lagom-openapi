@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.servers.Server;
+import org.taymyr.lagom.javadsl.openapi.LagomError;
 import org.taymyr.lagom.javadsl.openapi.OpenAPIService;
 
 import java.util.List;
@@ -76,7 +77,7 @@ public interface PetsService extends OpenAPIService {
                 description = "unexpected error",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Error.class)
+                    schema = @Schema(implementation = LagomError.class)
                 )
             )
         }
@@ -107,7 +108,7 @@ public interface PetsService extends OpenAPIService {
                 description = "unexpected error",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Error.class)
+                    schema = @Schema(implementation = LagomError.class)
                 )
             )
         }
@@ -139,7 +140,7 @@ public interface PetsService extends OpenAPIService {
                 description = "unexpected error",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Error.class)
+                    schema = @Schema(implementation = LagomError.class)
                 )
             )
         }
@@ -167,7 +168,7 @@ public interface PetsService extends OpenAPIService {
                 description = "unexpected error",
                 content = @Content(
                     mediaType = "application/json",
-                    schema = @Schema(implementation = Error.class)
+                    schema = @Schema(implementation = LagomError.class)
                 )
             )
         }

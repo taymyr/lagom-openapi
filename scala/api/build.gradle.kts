@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     compileOnly("com.lightbend.lagom", "lagom-scaladsl-api_$scalaBinaryVersion", lagomVersion)
+    compileOnly("io.swagger.core.v3", "swagger-annotations", Versions.swagger)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
