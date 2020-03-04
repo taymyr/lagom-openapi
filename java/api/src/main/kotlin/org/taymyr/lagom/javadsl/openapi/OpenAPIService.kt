@@ -22,6 +22,6 @@ interface OpenAPIService : Service {
 
     @JvmDefault
     fun withOpenAPI(descriptor: Descriptor): Descriptor = descriptor.withCalls(
-        pathCall<NotUsed, String>("/_${descriptor.name()}/openapi", OpenAPIService::openapi.javaMethod)
+        pathCall<NotUsed, String>("/_${descriptor.name()}/openapi?format", OpenAPIService::openapi.javaMethod)
     )
 }
