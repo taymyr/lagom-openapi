@@ -1,6 +1,10 @@
+import de.marcphilipp.gradle.nexus.NexusPublishPlugin
+import java.time.Duration
+
 plugins {
     kotlin("jvm") version Versions.kotlin apply false
     id("io.codearte.nexus-staging") version Versions.`nexus-staging`
+    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
     jacoco
     base
 }
@@ -17,9 +21,17 @@ subprojects {
     version = "1.2.0-SNAPSHOT"
 
     apply<JacocoPlugin>()
+    apply<NexusPublishPlugin>()
 
     jacoco {
         toolVersion = Versions.jacoco
+    }
+
+    nexusPublishing {
+        repositories {
+            sonatype()
+        }
+        clientTimeout.set(Duration.parse("PT10M")) // 10 minutes
     }
 }
 
@@ -59,8 +71,17 @@ nexusStaging {
     packageGroup = "org.taymyr"
     username = ossrhUsername
     password = ossrhPassword
+    numberOfRetries = 360 // 1 hour if 10 seconds delay
+    delayBetweenRetriesInMillis = 10000 // 10 seconds
 }
 
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
+}
+
+tasks.closeRepository {
+    mustRunAfter(subprojects.map { it.tasks.getByName("publishToSonatype") }.toTypedArray())
+}
+tasks.closeAndReleaseRepository {
+    mustRunAfter(subprojects.map { it.tasks.getByName("publishToSonatype") }.toTypedArray())
 }

@@ -1,7 +1,6 @@
 plugins {
     scala
     id("cz.alenkacz.gradle.scalafmt") version Versions.`scalafmt-plugin`
-    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
     signing
 }
 
