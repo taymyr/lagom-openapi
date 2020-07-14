@@ -137,6 +137,7 @@ object OperationMethodProcessor {
             operation.description(annotation.description.ifBlank { null })
             operation.operationId(annotation.operationId.ifBlank { null })
             operation.summary(annotation.summary.ifBlank { null })
+            operation.deprecated(annotation.deprecated.takeIf { annotation.deprecated })
             operation.externalDocs(
                 AnnotationsUtils.getExternalDocumentation(annotation.externalDocs)
                     .orElse(AnnotationsUtils.getExternalDocumentation(classInfo.externalDocumentation)
