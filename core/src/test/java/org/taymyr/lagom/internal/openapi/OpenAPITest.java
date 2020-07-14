@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.taymyr.lagom.internal.openapi.cases.ArrayParameterService;
 import org.taymyr.lagom.internal.openapi.cases.ClassHiddenService;
+import org.taymyr.lagom.internal.openapi.cases.DeprecatedOperationService;
 import org.taymyr.lagom.internal.openapi.cases.LinksService;
 import org.taymyr.lagom.internal.openapi.cases.OpenAPIDefinitionService;
 import org.taymyr.lagom.internal.openapi.cases.ParameterService;
@@ -47,6 +48,17 @@ class OpenAPITest {
                 new LagomCallInfo(ParameterService.class.getDeclaredMethod("test", String.class), "/test/{id}", "GET")
             )),
             "ParameterService.yml"
+        );
+    }
+
+    @Test
+    @DisplayName("Test service with a deprecated operation")
+    void testDeprecatedOperationService() throws NoSuchMethodException {
+        checkOpenAPISpec(
+            new LagomServiceInfo(DeprecatedOperationService.class, ImmutableList.of(
+                new LagomCallInfo(DeprecatedOperationService.class.getDeclaredMethod("test", String.class), "/test/{id}", "GET")
+            )),
+            "DeprecatedOperationService.yml"
         );
     }
 
