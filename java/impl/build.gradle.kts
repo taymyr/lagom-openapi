@@ -23,10 +23,10 @@ compileTestKotlin.kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=enable
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
-    implementation(project(":java:lagom-openapi-java-api"))
     implementation(project(":lagom-openapi-core"))
+    api(project(":java:lagom-openapi-java-api"))
+    api("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
     compileOnly("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
-    implementation("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
 
     testImplementation(evaluationDependsOn(":lagom-openapi-core").sourceSets.test.get().output)
     testImplementation("org.junit.jupiter", "junit-jupiter-api", Versions.junit5)
