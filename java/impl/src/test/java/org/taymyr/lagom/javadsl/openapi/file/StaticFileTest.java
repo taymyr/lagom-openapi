@@ -65,4 +65,13 @@ class StaticFileTest extends AbstractTest {
         );
     }
 
+    @Test
+    @DisplayName("Service without config should be return default yml spec")
+    void ktServiceWithDefaultYmlSpec() throws InterruptedException, ExecutionException, TimeoutException {
+        check(
+            new Test4ServiceImpl(ConfigFactory.load()),
+            yamlToJson(resourceAsString("test4.yml"))
+        );
+    }
+
 }

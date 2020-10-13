@@ -16,10 +16,17 @@ trait OpenAPIService {
    */
   def openapi(format: Option[String]): ServiceCall[NotUsed, String]
 
-  def withOpenAPI(descriptor: Descriptor): Descriptor = {
-    descriptor.addCalls(
-      pathCall(s"/_${descriptor.name}/openapi?format", openapi _)
-    )
-  }
+  /**
+   * @deprecated Use extension function withOpenAPI() instead.
+   */
+  @Deprecated
+  def withOpenAPI(descriptor: Descriptor): Descriptor = descriptor.withOpenAPI()
 
+  implicit class DescriptorWithOpenAPI(descriptor: Descriptor) {
+    def withOpenAPI(): Descriptor = {
+      descriptor.addCalls(
+        pathCall(s"/_${descriptor.name}/openapi?format", openapi _)
+      )
+    }
+  }
 }

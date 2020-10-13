@@ -7,7 +7,7 @@ import org.taymyr.lagom.scaladsl.openapi.OpenAPIService
 import org.taymyr.lagom.scaladsl.openapi.OpenAPIServiceImpl
 
 trait EmptyService extends OpenAPIService with Service {
-  override def descriptor: Descriptor = withOpenAPI(Service.named("test"))
+  override def descriptor: Descriptor = Service.named("test").withOpenAPI()
 }
 
 class EmptyServiceImpl(override val config: Config) extends EmptyService with OpenAPIServiceImpl {}
