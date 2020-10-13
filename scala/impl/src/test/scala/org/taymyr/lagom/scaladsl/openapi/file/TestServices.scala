@@ -7,16 +7,16 @@ import org.taymyr.lagom.scaladsl.openapi.OpenAPIService
 import org.taymyr.lagom.scaladsl.openapi.OpenAPIServiceImpl
 
 trait Test1Service extends OpenAPIService with Service {
-  override def descriptor: Descriptor = withOpenAPI(Service.named("test1"))
+  override def descriptor: Descriptor = Service.named("test1").withOpenAPI()
 }
 class Test1ServiceImpl(override val config: Config) extends Test1Service with OpenAPIServiceImpl {}
 
 trait Test2Service extends OpenAPIService with Service {
-  override def descriptor: Descriptor = withOpenAPI(Service.named("test2"))
+  override def descriptor: Descriptor = Service.named("test2").withOpenAPI()
 }
 class Test2ServiceImpl(override val config: Config) extends Test2Service with OpenAPIServiceImpl {}
 
 trait Test3Service extends OpenAPIService with Service {
-  override def descriptor: Descriptor = withOpenAPI(Service.named("test3"))
+  override def descriptor: Descriptor = Service.named("test3").withOpenAPI()
 }
 class Test3ServiceImpl(override val config: Config) extends Test3Service with OpenAPIServiceImpl {}

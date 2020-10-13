@@ -153,13 +153,13 @@ trait PetsService extends OpenAPIService with Service {
   def delete(id: Long): ServiceCall[NotUsed, NotUsed]
 
   override def descriptor: Descriptor =
-    withOpenAPI(
-      named("test").withCalls(
+    named("test")
+      .withOpenAPI()
+      .withCalls(
         pathCall("/pets?tags&limit", find _),
         restCall(Method.POST, "/pets", create),
         pathCall("/pets/:id", findBy _),
         restCall(Method.DELETE, "/pets/:id", delete _)
       )
-    )
 
 }

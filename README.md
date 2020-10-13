@@ -85,10 +85,9 @@ def method: ServiceCall[_, _]
 In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```scala
-override def descriptor: Descriptor = withOpenAPI(
-  named("service")
+override def descriptor: Descriptor = named("service")
+    .withOpenAPI()
     ...
-)
 ```
 
 or use a custom route
@@ -446,7 +445,7 @@ Also, you can change filename using `openapi.file` configuration in `application
 openapi.file = foobar.yml
 ```
 
-In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
+In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `org.taymyr.lagom.javadsl.openapi.OpenAPIUtils#withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```java
 @Override
