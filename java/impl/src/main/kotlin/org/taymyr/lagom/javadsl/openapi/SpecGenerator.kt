@@ -18,7 +18,7 @@ import org.taymyr.lagom.internal.openapi.SpecGenerator
 import java.lang.reflect.Method
 import java.lang.reflect.ParameterizedType
 
-class SpecGenerator(spec: OpenAPI = OpenAPI()) : SpecGenerator(spec) {
+internal class SpecGenerator(spec: OpenAPI = OpenAPI()) : SpecGenerator(spec) {
 
     private fun MethodRefServiceCallHolder.toMethod(): Method = when (val methodReference = this.methodReference()) {
         is Method -> methodReference

@@ -20,6 +20,14 @@ val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions.jvmTarget = "1.8"
 compileTestKotlin.kotlinOptions.freeCompilerArgs += listOf("-Xjvm-default=enable", "-Xjsr305=strict")
 
+sourceSets.main {
+    if (scalaBinaryVersion == "2.11") {
+        java.srcDirs("src/main/kotlin", "src/main/kotlin-2.11")
+    } else {
+        java.srcDirs("src/main/kotlin", "src/main/kotlin-2.12-2.13")
+    }
+}
+
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))

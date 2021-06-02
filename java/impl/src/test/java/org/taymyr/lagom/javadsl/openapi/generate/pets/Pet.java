@@ -6,8 +6,8 @@ import lombok.Value;
 @Value
 public class Pet {
     @Schema(required = true)
-    private Long id;
+    Long id;
     @Schema(required = true)
-    private String name;
-    private String tag;
+    String name;
+    String tag;
 }

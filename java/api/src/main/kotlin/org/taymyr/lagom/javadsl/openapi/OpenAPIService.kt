@@ -1,4 +1,5 @@
 @file:JvmName("OpenAPIUtils")
+@file:Suppress("DeprecatedCallableAddReplaceWith")
 package org.taymyr.lagom.javadsl.openapi
 
 import akka.NotUsed
@@ -12,6 +13,7 @@ import kotlin.reflect.jvm.javaMethod
 /**
  * OpenAPI service descriptor.
  */
+@Deprecated("Use `OpenAPIRouter` instead")
 interface OpenAPIService : Service {
 
     /**
@@ -22,11 +24,11 @@ interface OpenAPIService : Service {
     fun openapi(format: Optional<String>): ServiceCall<NotUsed, String>
 
     @JvmDefault
-    @Suppress("DeprecatedCallableAddReplaceWith")
     @Deprecated("Use static function OpenAPIUtils.withOpenAPI(...) instead.")
     fun withOpenAPI(descriptor: Descriptor): Descriptor = descriptor.withOpenAPI()
 }
 
+@Deprecated("Use `OpenAPIRouter` instead")
 fun Descriptor.withOpenAPI(): Descriptor = this.withCalls(
     pathCall<NotUsed, String>("/_${this.name()}/openapi?format", OpenAPIService::openapi.javaMethod)
 )
