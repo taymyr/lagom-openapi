@@ -6,6 +6,6 @@ import lombok.Value;
 @Value
 public class NewPet {
     @Schema(required = true)
-    private String name;
-    private String tag;
+    String name;
+    String tag;
 }

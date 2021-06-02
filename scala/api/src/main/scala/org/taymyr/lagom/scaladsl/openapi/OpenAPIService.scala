@@ -8,6 +8,7 @@ import com.lightbend.lagom.scaladsl.api.ServiceCall
 /**
  * OpenAPI service descriptor.
  */
+@deprecated("Use `OpenAPIRouter` instead", "1.3.0")
 trait OpenAPIService {
 
   /**
@@ -19,7 +20,7 @@ trait OpenAPIService {
   /**
    * @deprecated Use extension function withOpenAPI() instead.
    */
-  @Deprecated
+  @deprecated("Use extension function withOpenAPI() instead")
   def withOpenAPI(descriptor: Descriptor): Descriptor = descriptor.withOpenAPI()
 
   implicit class DescriptorWithOpenAPI(descriptor: Descriptor) {

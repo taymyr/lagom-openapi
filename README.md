@@ -25,7 +25,7 @@ Also, you can see how to generate OpenAPI Specification for Lagom service on dem
 
 ### 1.1.1 Dependencies
 
-You need to add next dependencies to the _API_ module of Lagom service:
+[*Only for Lagom 1.4.X*] You need to add next dependencies to the _API_ module of Lagom service:
 
 ```scala
 val swaggerAnnotations = "io.swagger.core.v3" % "swagger-annotations" % "2.0.7"
@@ -58,7 +58,7 @@ lazy val `lagom-service-impl` = (project in file("impl"))
 
 ### 1.1.2 Service Descriptor
 
-Necessarily add `OpenAPIDefinition` annotation to Lagom service descriptor and extend descriptor by `OpenAPIService` trait:
+Necessarily add `OpenAPIDefinition` annotation to Lagom service descriptor and extend (*only for Lagom 1.4.X*) descriptor by `OpenAPIService` trait:
 
 ```scala
 @OpenAPIDefinition(
@@ -82,7 +82,7 @@ Then you can use OpenAPI annotations for the methods of your service. For more i
 def method: ServiceCall[_, _]
 ```
 
-In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
+[*Only for Lagom 1.4.X*]  In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```scala
 override def descriptor: Descriptor = named("service")
@@ -100,7 +100,7 @@ override def descriptor: Descriptor = named("service")
     )
 ```
 
-### 1.1.3 Service implementation
+### 1.1.3 Service implementation [Lagom 1.4.X]
 
 Extend your service by the `OpenAPIServiceImpl` trait:
 
@@ -112,7 +112,19 @@ class MyServiceImpl(override val config: Config)
 }
 ```
 
-### 1.1.4 Conclusion
+### 1.1.4 Additional router [Lagom 1.5.X+]
+
+Add [additional router](https://www.lagomframework.com/documentation/current/scala/AdditionalRouters.html#Additional-Routers) for your service
+
+```scala
+override lazy val lagomServer = {
+  val service = wire[PetsServiceImpl]
+  serverFor[PetsService](service)
+    .additionalRouter(wire[OpenAPIRouter].router(service))
+}
+```
+
+### 1.1.5 Conclusion
 
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
@@ -124,7 +136,7 @@ curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 
 ### 1.2.1 Dependencies
 
-You need to add next dependencies to the _API_ module of Lagom service:
+[*Only for Lagom 1.4.X*] You need to add next dependencies to the _API_ module of Lagom service:
 
 **Maven**
 
@@ -190,7 +202,7 @@ lazy val `lagom-service-impl` = (project in file("impl"))
 
 ### 1.2.2 Service Descriptor
 
-Necessarily add `OpenAPIDefinition` annotation to Lagom service descriptor and extend descriptor by `OpenAPIService` interface:
+Necessarily add `OpenAPIDefinition` annotation to Lagom service descriptor and extend (*only for Lagom 1.4.X*) descriptor by `OpenAPIService` interface:
 
 ```java
 @OpenAPIDefinition(
@@ -214,7 +226,7 @@ Then you can use OpenAPI annotations for the methods of your service. For more i
 ServiceCall<_, _> method();
 ```
 
-In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
+[*Only for Lagom 1.4.X*]  In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```java
 @Override
@@ -239,9 +251,9 @@ default Descriptor descriptor() {
 }
 ```
 
-### 1.2.3 Service implementation
+### 1.2.3 Service implementation [Lagom 1.4.X]
 
-Extend your service by the abstract `AbstractOpenAPIService`:
+[*Only for Lagom 1.4.X*] Extend your service by the abstract `AbstractOpenAPIService`:
 
 ```java
 public class MyServiceImpl extends AbstractOpenAPIService implements MyService {
@@ -249,7 +261,23 @@ public class MyServiceImpl extends AbstractOpenAPIService implements MyService {
 }
 ```
 
-### 1.2.4 Conclusion
+### 1.2.4 Additional router [Lagom 1.5.X+]
+
+Add [additional router](https://www.lagomframework.com/documentation/current/java/AdditionalRouters.html#Additional-Routers) for your service
+
+```java
+@Override
+protected void configure() {
+    OpenAPIRouter openAPIRouter = new OpenAPIRouter(
+        getProvider(RoutingDsl.class),
+        getProvider(MyServiceImpl.class),
+        getProvider(Config.class)
+    );
+    bindService(MyService.class, MyServiceImpl.class, additionalRouter(openAPIRouter));
+}
+```
+
+### 1.2.5 Conclusion
 
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
@@ -261,7 +289,7 @@ curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 
 ### 2.1.1 Dependencies
 
-You need to add next dependencies to the _API_ module of Lagom service:
+[*Only for Lagom 1.4.X*] You need to add next dependencies to the _API_ module of Lagom service:
 
 ```scala
 val lagomOpenapiApi = "org.taymyr.lagom" %% "lagom-openapi-scala-api" % lagomOpenapiVersion
@@ -292,7 +320,7 @@ lazy val `lagom-service-impl` = (project in file("impl"))
 
 ### 2.1.2 Service Descriptor
 
-Extend Lagom service descriptor by `OpenAPIService` trait:
+[*Only for Lagom 1.4.X*] Extend Lagom service descriptor by `OpenAPIService` trait:
 
 ```scala
 trait MyService extends OpenAPIService with Service {
@@ -317,7 +345,7 @@ Also, you can change filename using `openapi.file` configuration in `application
 openapi.file = foobar.yml
 ```
 
-In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
+[*Only for Lagom 1.4.X*] In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```scala
 override def descriptor: Descriptor = withOpenAPI(
@@ -336,9 +364,9 @@ override def descriptor: Descriptor = named("service")
     )
 ```
 
-### 2.1.3 Service implementation
+### 2.1.3 Service implementation [Lagom 1.4.X]
 
-Extend your service by the `OpenAPIServiceImpl` trait:
+[*Only for Lagom 1.4.X*] Extend your service by the `OpenAPIServiceImpl` trait:
 
 ```scala
 class MyServiceImpl(override val config: Config)
@@ -348,7 +376,19 @@ class MyServiceImpl(override val config: Config)
 }
 ```
 
-### 2.1.4 Conclusion
+### 2.1.4 Additional router [Lagom 1.5.X+]
+
+Add [additional router](https://www.lagomframework.com/documentation/current/scala/AdditionalRouters.html#Additional-Routers) for your service
+
+```scala
+override lazy val lagomServer = {
+  val service = wire[PetsServiceImpl]
+  serverFor[PetsService](service)
+    .additionalRouter(wire[OpenAPIRouter].router(service))
+}
+```
+
+### 2.1.5 Conclusion
 
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 
@@ -361,7 +401,7 @@ curl "http://localhost:9000/_<service_name>/openapi[?format=json|yaml]"
 
 ### 2.2.1 Dependencies
 
-You need to add next dependencies to the _API_ module of Lagom service:
+[*Only for Lagom 1.4.X*] You need to add next dependencies to the _API_ module of Lagom service:
 
 **Maven**
 
@@ -420,7 +460,7 @@ lazy val `lagom-service-impl` = (project in file("impl"))
 
 ### 2.2.2 Service Descriptor
 
-Extend Lagom service descriptor by `OpenAPIService` interface:
+[*Only for Lagom 1.4.X*] Extend Lagom service descriptor by `OpenAPIService` interface:
 
 ```java
 public interface MyService extends OpenAPIService {
@@ -445,7 +485,7 @@ Also, you can change filename using `openapi.file` configuration in `application
 openapi.file = foobar.yml
 ```
 
-In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `org.taymyr.lagom.javadsl.openapi.OpenAPIUtils#withOpenAPI` (default route is `/_<service_name>/openapi`)
+[*Only for Lagom 1.4.X*] In conclusion, you must add the route for OpenAPI specification. You can do that with helper function `org.taymyr.lagom.javadsl.openapi.OpenAPIUtils#withOpenAPI` (default route is `/_<service_name>/openapi`)
 
 ```java
 @Override
@@ -470,7 +510,7 @@ default Descriptor descriptor() {
 }
 ```
 
-### 2.2.3 Service implementation
+### 2.2.3 Service implementation [Lagom 1.4.X]
 
 Extend your service by the abstract `AbstractOpenAPIService`:
 
@@ -480,7 +520,24 @@ public class MyServiceImpl extends AbstractOpenAPIService implements MyService {
 }
 ```
 
-### 2.2.4 Conclusion
+### 2.2.4 Additional router [Lagom 1.5.X+]
+
+Add [additional router](https://www.lagomframework.com/documentation/current/java/AdditionalRouters.html#Additional-Routers) for your service
+
+```java
+@Override
+protected void configure() {
+    OpenAPIRouter openAPIRouter = new OpenAPIRouter(
+        getProvider(RoutingDsl.class),
+        getProvider(MyServiceImpl.class),
+        getProvider(Config.class)
+    );
+    bindService(MyService.class, MyServiceImpl.class, additionalRouter(openAPIRouter));
+}
+```
+
+
+### 2.2.5 Conclusion
 
 Now you can run service and get OpenAPI specification by a sent HTTP request to the registered route. For example by default:
 

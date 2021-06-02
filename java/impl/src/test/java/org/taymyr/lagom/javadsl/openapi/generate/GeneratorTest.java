@@ -31,7 +31,7 @@ class GeneratorTest extends AbstractTest {
     }
 
     @Test
-    @DisplayName("Service without OpenAPIDefinition should generate specification")
+    @DisplayName("Service with OpenAPIDefinition should generate specification")
     void shouldNormalGenerateYaml() throws InterruptedException, ExecutionException, TimeoutException, IOException {
         check(
             new PetsServiceImpl(load()),

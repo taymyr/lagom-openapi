@@ -22,7 +22,7 @@ class GeneratorSpec extends AnyWordSpec with OpenAPISpec with Matchers {
     }
   }
 
-  "Service without OpenAPIDefinition" should {
+  "Service with OpenAPIDefinition" should {
     "generate yaml specification" in {
       check(
         new PetsServiceImpl(ConfigFactory.empty),
