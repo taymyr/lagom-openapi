@@ -16,4 +16,5 @@ object Versions {
     const val lombok = "4.1.6"
     const val `scalafmt-plugin` = "1.13.0"
     const val scalatest = "3.1.1"
+    const val jgitver = "0.9.1"
 }
