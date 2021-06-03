@@ -70,10 +70,10 @@ private val OAuthFlow.passwordModel: ModelOAuthFlow? get() = common?.tokenUrl(to
 
 private fun OAuthFlows.isEmpty() =
     authorizationCode.isEmpty() &&
-    clientCredentials.isEmpty() &&
-    implicit.isEmpty() &&
-    password.isEmpty() &&
-    extensions.isNullOrEmpty()
+        clientCredentials.isEmpty() &&
+        implicit.isEmpty() &&
+        password.isEmpty() &&
+        extensions.isNullOrEmpty()
 
 private val OAuthFlows?.model: ModelOAuthFlows? get() = when {
     this == null || this.isEmpty() -> null

@@ -73,14 +73,16 @@ object OperationMethodProcessor {
             else ModelRequestBody()
                 .description(requestBody.description.ifBlank { null })
                 .required(if (requestBody.required) requestBody.required else null)
-                .content(AnnotationsUtils.getContent(
-                    requestBody.content,
-                    null,
-                    null,
-                    null,
-                    spec.components,
-                    null
-                ).orElse(null))
+                .content(
+                    AnnotationsUtils.getContent(
+                        requestBody.content,
+                        null,
+                        null,
+                        null,
+                        spec.components,
+                        null
+                    ).orElse(null)
+                )
                 .`$ref`(requestBody.ref.ifBlank { null })
         )
 
@@ -113,14 +115,16 @@ object OperationMethodProcessor {
             response.responseCode to ModelApiResponse()
                 .description(response.description)
                 .headers(AnnotationsUtils.getHeaders(response.headers, null).orElse(null))
-                .content(AnnotationsUtils.getContent(
-                    response.content,
-                    null,
-                    null,
-                    null,
-                    spec.components,
-                    null
-                ).orElse(null))
+                .content(
+                    AnnotationsUtils.getContent(
+                        response.content,
+                        null,
+                        null,
+                        null,
+                        spec.components,
+                        null
+                    ).orElse(null)
+                )
                 .`$ref`(response.ref.ifBlank { null })
                 .apply {
                     links = AnnotationsUtils.getLinks(response.links).ifEmpty { null }
@@ -140,8 +144,10 @@ object OperationMethodProcessor {
             operation.deprecated(annotation.deprecated.takeIf { annotation.deprecated })
             operation.externalDocs(
                 AnnotationsUtils.getExternalDocumentation(annotation.externalDocs)
-                    .orElse(AnnotationsUtils.getExternalDocumentation(classInfo.externalDocumentation)
-                        .orElse(null))
+                    .orElse(
+                        AnnotationsUtils.getExternalDocumentation(classInfo.externalDocumentation)
+                            .orElse(null)
+                    )
             )
             processParameters(annotation.parameters, spec, operation)
             processRequestBody(annotation.requestBody, spec, operation)

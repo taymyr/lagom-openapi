@@ -24,7 +24,9 @@ dependencies {
 ktlint {
     version.set(Versions.ktlint)
     outputToConsole.set(true)
-    reporters.set(setOf(ReporterType.CHECKSTYLE))
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }
 
 val sourcesJar by tasks.creating(Jar::class) {

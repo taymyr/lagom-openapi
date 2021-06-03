@@ -28,9 +28,11 @@ internal class SpecGenerator(spec: OpenAPI = OpenAPI()) : SpecGenerator(spec) {
             } catch (t: Throwable) {
                 throw IllegalStateException(
                     """Unable to resolve method for service call.
-                Ensure that the you have passed a method reference (ie, this::someMethod). Passing anything else,
-                for example lambdas, anonymous classes or actual implementation classes, is forbidden in declaring a
-                service descriptor.""".trimIndent(), t
+                    Ensure that the you have passed a method reference (ie, this::someMethod). Passing anything else,
+                    for example lambdas, anonymous classes or actual implementation classes, is forbidden in declaring a
+                    service descriptor.
+                    """.trimIndent(),
+                    t
                 )
             }
         }

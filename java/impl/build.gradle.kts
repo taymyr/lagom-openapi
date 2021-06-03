@@ -52,7 +52,9 @@ configurations {
 ktlint {
     version.set(Versions.ktlint)
     outputToConsole.set(true)
-    reporters.set(setOf(ReporterType.CHECKSTYLE))
+    reporters {
+        reporter(ReporterType.CHECKSTYLE)
+    }
 }
 
 tasks.withType<Test> {
