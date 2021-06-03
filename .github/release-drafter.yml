@@ -1,3 +1,5 @@
+name-template: ':mega: Lagom OpenAPI $NEXT_MINOR_VERSION released!'
+tag-template: '$NEXT_MINOR_VERSION'
 categories:
   - title: ':rocket: Features'
     labels:
@@ -10,7 +12,6 @@ categories:
       - 'dependency'
 
 template: |
-  # :mega: Lagom OpenAPI X.Y.Z released!
 
   We are pleased to announce the release of OpenAPI module for [Lagom](https://www.lagomframework.com/) framework.
 
