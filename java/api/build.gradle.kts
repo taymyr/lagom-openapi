@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.dokka") version Versions.dokka
     id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
+    `maven-publish`
     signing
 }
 

@@ -9,6 +9,7 @@ plugins {
     id("org.jetbrains.dokka") version Versions.dokka
     id("org.jlleitschuh.gradle.ktlint") version Versions.`ktlint-plugin`
     id("io.freefair.lombok") version Versions.lombok
+    `maven-publish`
     signing
 }
 
