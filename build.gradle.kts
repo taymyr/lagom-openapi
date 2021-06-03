@@ -1,15 +1,16 @@
+import fr.brouillard.oss.jgitver.Strategies.MAVEN
 import java.time.Duration
 
 plugins {
     kotlin("jvm") version Versions.kotlin apply false
     id("io.github.gradle-nexus.publish-plugin") version Versions.`publish-plugin`
+    id("fr.brouillard.oss.gradle.jgitver") version Versions.jgitver
     jacoco
     base
 }
 
 allprojects {
     group = "org.taymyr.lagom"
-    version = "1.3.0-SNAPSHOT"
     repositories {
         mavenCentral()
     }
@@ -21,6 +22,10 @@ subprojects {
     jacoco {
         toolVersion = Versions.jacoco
     }
+}
+
+jgitver {
+    strategy(MAVEN)
 }
 
 nexusPublishing {
