@@ -1,37 +1,33 @@
-import de.marcphilipp.gradle.nexus.NexusPublishPlugin
 import java.time.Duration
 
 plugins {
     kotlin("jvm") version Versions.kotlin apply false
-    id("io.codearte.nexus-staging") version Versions.`nexus-staging`
-    id("de.marcphilipp.nexus-publish") version Versions.`nexus-publish`
+    id("io.github.gradle-nexus.publish-plugin") version Versions.`publish-plugin`
     jacoco
     base
 }
 
 allprojects {
+    group = "org.taymyr.lagom"
+    version = "1.3.0-SNAPSHOT"
     repositories {
         mavenCentral()
-        jcenter()
     }
 }
 
 subprojects {
-    group = "org.taymyr.lagom"
-    version = "1.3.0-SNAPSHOT"
-
     apply<JacocoPlugin>()
-    apply<NexusPublishPlugin>()
 
     jacoco {
         toolVersion = Versions.jacoco
     }
+}
 
-    nexusPublishing {
-        repositories {
-            sonatype()
-        }
-        clientTimeout.set(Duration.parse("PT10M")) // 10 minutes
+nexusPublishing {
+    packageGroup.set("org.taymyr")
+    clientTimeout.set(Duration.ofMinutes(60))
+    repositories {
+        sonatype()
     }
 }
 
@@ -67,21 +63,6 @@ val jacocoAggregateReport by tasks.creating(JacocoReport::class) {
 
 tasks.check { finalizedBy(jacocoAggregateReport) }
 
-nexusStaging {
-    packageGroup = "org.taymyr"
-    username = ossrhUsername
-    password = ossrhPassword
-    numberOfRetries = 360 // 1 hour if 10 seconds delay
-    delayBetweenRetriesInMillis = 10000 // 10 seconds
-}
-
 tasks.wrapper {
     distributionType = Wrapper.DistributionType.ALL
-}
-
-tasks.closeRepository {
-    mustRunAfter(subprojects.map { it.tasks.getByName("publishToSonatype") }.toTypedArray())
-}
-tasks.closeAndReleaseRepository {
-    mustRunAfter(subprojects.map { it.tasks.getByName("publishToSonatype") }.toTypedArray())
 }

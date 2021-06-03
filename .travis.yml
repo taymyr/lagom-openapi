@@ -37,13 +37,13 @@ before_deploy:
 deploy:
   # Deploy releases
   - provider: script
-    script: ./gradlew publishToSonatype closeAndReleaseRepository -x test -Psigning.keyId=$GPG_KEY_NAME -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile=$HOME/.gnupg/taymyr.gpg -PossrhUsername=$OSS_USERNAME -PossrhPassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION -PlagomVersion=$LAGOM_VERSION
+    script: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository -x test -Psigning.keyId=$GPG_KEY_NAME -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile=$HOME/.gnupg/taymyr.gpg -PsonatypeUsername=$OSS_USERNAME -PsonatypePassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION -PlagomVersion=$LAGOM_VERSION
     skip_cleanup: true
     on:
       tags: true
   # Deploy snapshots
   - provider: script
-    script: ./gradlew publishToSonatype -x test -Psigning.keyId=$GPG_KEY_NAME -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile=$HOME/.gnupg/taymyr.gpg -PossrhUsername=$OSS_USERNAME -PossrhPassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION -PlagomVersion=$LAGOM_VERSION
+    script: ./gradlew publishToSonatype -x test -PsonatypeUsername=$OSS_USERNAME -PsonatypePassword="$OSS_PASSWORD" -PscalaBinaryVersion=$SCALA_VERSION -PlagomVersion=$LAGOM_VERSION
     skip_cleanup: true
     on:
       branch: master
