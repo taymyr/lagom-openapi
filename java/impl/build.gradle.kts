@@ -34,7 +34,6 @@ dependencies {
     implementation(kotlin("reflect"))
     implementation(project(":lagom-openapi-core"))
     api(project(":java:lagom-openapi-java-api"))
-    api("io.github.microutils", "kotlin-logging", Versions.`kotlin-logging`)
     compileOnly("com.lightbend.lagom", "lagom-javadsl-server_$scalaBinaryVersion", lagomVersion)
 
     testImplementation(evaluationDependsOn(":lagom-openapi-core").sourceSets.test.get().output)
