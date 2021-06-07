@@ -6,12 +6,10 @@ import com.typesafe.config.Config
 import io.swagger.v3.core.util.Json
 import io.swagger.v3.core.util.Yaml
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
-import mu.KotlinLogging
+import org.slf4j.LoggerFactory
 import org.taymyr.lagom.internal.openapi.isAnnotationPresentInherited
 import org.taymyr.lagom.internal.openapi.jsonToYaml
 import org.taymyr.lagom.internal.openapi.yamlToJson
-
-private val log = KotlinLogging.logger {}
 
 internal class OpenAPIContainer(service: Service, config: Config?) {
 
@@ -28,6 +26,8 @@ internal class OpenAPIContainer(service: Service, config: Config?) {
 
     companion object {
         private const val SPEC_CONFIG_PATH = "openapi.file"
+
+        private val log = LoggerFactory.getLogger(OpenAPIContainer::class.java)
 
         fun generateSpecResource(service: Service): OpenAPISpec {
             val api = SpecGenerator().generate(service)
@@ -55,12 +55,12 @@ internal class OpenAPIContainer(service: Service, config: Config?) {
                     spec = openapiSpec?.readText()
                     spec ?: continue
                     protocol = fromFile(filename, YAML)
-                    log.info { "Load OpenAPI specification from $openapiSpec" }
+                    log.info("Load OpenAPI specification from {}", openapiSpec)
                     break
                 } catch (e: Exception) {
                 }
             }
-            if (spec == null) log.error { "OpenAPI specification not found in $paths" }
+            if (spec == null) log.error("OpenAPI specification not found in {}", paths)
             return when (protocol) {
                 JSON -> OpenAPISpec(spec, jsonToYaml(spec))
                 YAML -> OpenAPISpec(yamlToJson(spec), spec)
