@@ -18,9 +18,10 @@ class OpenAPIRouter(action: DefaultActionBuilder, config: Config) {
   def router(service: Service, path: Option[String] = None): Router = {
     val openapi: OpenAPIContainer = OpenAPIContainer(service, config)
     val route                     = path.getOrElse(s"/_${service.descriptor.name}/openapi")
+    val pathExtractor             = new StringContext(route).p
     Router
       .from {
-        case GET(p"$p*") if p.equals(route) =>
+        case GET(pathExtractor()) =>
           action { request =>
             val isJson = "json".equalsIgnoreCase(request.getQueryString("format").orNull)
             if (isJson) response(openapi.spec.json, "application/json")
